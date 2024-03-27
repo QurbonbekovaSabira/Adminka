@@ -1,5 +1,6 @@
 import axios from "axios";
-import { getCookie } from "typescript-cookie";
+// import { getCookie } from "typescript-cookie";
+import { Cookies } from "typescript-cookie";
 
 const requst = axios.create({
   baseURL: "http://135.181.108.207",
@@ -8,11 +9,10 @@ const requst = axios.create({
 
 requst.interceptors.request.use(
   (config: any): any => {
-    const token = getCookie("user");
-    config.headers = {
-      ...config.headers,
-      Authorization: `Bearer ${token}`,
-    };
+    const token = Cookies.get("user");
+    if (config.url !== "/api/admin-login/") {
+      config.headers["Authorization"] = `Token ${token}`;
+    }
     return config;
   },
   (error) => {

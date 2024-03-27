@@ -1,7 +1,8 @@
-
+import { useGetSubCategory } from "./service/query/useGetSubCategory";
 
 export const SubCategory = () => {
-  return (
-    <div>SubCategory</div>
-  )
-}
+  const { data, isLoading } = useGetSubCategory();
+  console.log(data.results);
+
+  return <div>SubCategory</div>;
+};

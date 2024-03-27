@@ -4,21 +4,16 @@ import type { TableProps } from "antd";
 import { useDeleteCategory } from "./service/mutation/useDeleteCategory";
 import { DataType } from "./type";
 import { nanoid } from "@reduxjs/toolkit";
-// import { client } from "../../config/query-client";
+import { client } from "../../config/query-client";
 import React from "react";
-interface Type {
-  title: string;
-  dataIndex: string;
-  image: string;
-  buttons: string;
-}
-
+import { useNavigate } from "react-router-dom";
 export const Category = () => {
   const [id, setId] = React.useState<DataType>({
     id: 0,
     title: "lorem",
     image: "lorem",
   });
+  const navigate = useNavigate();
   const { mutate } = useDeleteCategory(id);
   const { data: userData } = useGetCategory();
   const deleteCategory = (newData: DataType) => {
@@ -34,10 +29,11 @@ export const Category = () => {
     });
   };
 
-  const columns: TableProps<Type>["columns"] = [
+  const columns: TableProps<DataType>["columns"] = [
     {
       title: "Category",
       dataIndex: "title",
+      key: "title",
     },
     {
       title: "id",
@@ -61,7 +57,7 @@ export const Category = () => {
     },
     {
       title: "Changes",
-      dataIndex: "Changes",
+      dataIndex: "buttons",
       render: (_, allData) => (
         <Space size="middle" key={nanoid()}>
           <Button onClick={() => deleteCategory(allData)} type="primary">
@@ -80,6 +76,11 @@ export const Category = () => {
 
   return (
     <div>
+      <div style={{ marginBottom: "40px" }}>
+        <Button onClick={() => navigate("/app/create-category")} type="primary">
+          Create Category
+        </Button>
+      </div>
       <Table columns={columns} dataSource={data} />
     </div>
   );

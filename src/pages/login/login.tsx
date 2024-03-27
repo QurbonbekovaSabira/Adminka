@@ -23,8 +23,7 @@ export const Login: React.FC = () => {
   const submit = (value: FieldType) => {
     mutate(value, {
       onSuccess: (res) => {
-        console.log(res);
-        setCookies("user", res.token);
+        Cookies.set("user", res.token, { expires: 7 });
         navigate("/app", { replace: true });
       },
       onError: (error) => {

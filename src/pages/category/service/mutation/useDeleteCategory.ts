@@ -8,10 +8,14 @@ export const useDeleteCategory = (
     image: string;
   } | null
 ) => {
+  console.log(data);
+
   return useMutation({
     mutationKey: ["delete-category"],
     mutationFn: () => {
-      return requst.delete(`/category/${data?.id}/`).then((res) => res.data);
+      return requst
+        .delete(`/category/${String(data?.id)}/`)
+        .then((res) => res.data);
     },
   });
 };

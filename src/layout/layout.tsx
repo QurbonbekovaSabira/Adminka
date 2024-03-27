@@ -31,8 +31,8 @@ export const MainLayout: React.FC = () => {
 
   return (
     <Layout>
-      <Sider style={{ padding: "25px" }}>
-        <div>
+      <Sider style={{ height: "100vh", padding: "25px" }}>
+        <div style={{ marginBottom: "25px" }}>
           <h1 className="amin_title">Admin</h1>
         </div>
         <Menu
@@ -43,11 +43,12 @@ export const MainLayout: React.FC = () => {
         />
       </Sider>
       <Layout>
-        <Content style={{ margin: "24px 16px 0", marginBottom: "25px" }}>
+        <Content style={{ margin: "24px 16px 0" }}>
           <div
             style={{
               padding: 24,
-              minHeight: 680,
+              height: "680px",
+              overflowY: "scroll",
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
             }}
