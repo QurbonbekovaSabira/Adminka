@@ -21,7 +21,6 @@ export const CreateCategoryComp: React.FC<Type> = (setActive) => {
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
     setFileList(newFileList);
 
-  //   console.log(setActive.setActive);
   const submit = (value: SubmitData) => {
     console.log(value);
 

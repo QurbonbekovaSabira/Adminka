@@ -6,7 +6,7 @@ import { usePostSubCategory } from "../service/mutation/usePostSubCategory";
 import { SubmitData } from "../../../type";
 import { PlusOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { useGetCategoryId } from "../service/query/useGetCategoryId";
+import { useGetCategoryId } from "../../../service/query/useGetCategoryId";
 export const CreateSubCategory: React.FC<ActiveType> = ({
   active,
   title,

@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { requst } from "../../../../config/request";
+import { requst } from "../../config/request";
 
 export const useDeleteCategory = (
   data: {
@@ -8,8 +8,6 @@ export const useDeleteCategory = (
     image: string;
   } | null
 ) => {
-  console.log(data);
-
   return useMutation({
     mutationKey: ["delete-category"],
     mutationFn: () => {
