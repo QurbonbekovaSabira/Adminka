@@ -1,14 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
 import { requst } from "../../../../config/request";
-import { CategoryType } from "../../../category/type";
-export const usePostSubCategory = () => {
+import { CategoryType } from "../../../../type";
+export const usePutCategory = (id: number) => {
   return useMutation({
-    mutationKey: ["post-subcategory"],
+    mutationKey: ["put-category", id],
     mutationFn: (data: FormData) => {
-      console.log(data);
-
       return requst
-        .post<CategoryType>(`/category/`, data, {
+        .put<CategoryType>(`/category/${id}/`, data, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

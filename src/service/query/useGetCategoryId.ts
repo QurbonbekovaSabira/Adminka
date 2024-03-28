@@ -3,7 +3,7 @@ import { requst } from "../../config/request";
 
 export const useGetCategoryId = (id: number) => {
   return useQuery({
-    queryKey: ["category-id"],
+    queryKey: ["category-id", id],
     queryFn: () => {
       return requst.get(`/category/${id}/`).then((res) => res.data);
     },

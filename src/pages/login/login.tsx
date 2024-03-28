@@ -2,7 +2,6 @@ import { Input, Form } from "antd";
 import { Button } from "antd";
 import React from "react";
 import { usePostAdmin } from "./service/mutation/usePostAdmin";
-import { setCookies } from "../../lib/store";
 import { useNavigate } from "react-router-dom";
 import { Cookies } from "typescript-cookie";
 import { useEffect } from "react";

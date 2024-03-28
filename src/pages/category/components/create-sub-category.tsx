@@ -1,61 +1,57 @@
-import { Form, Input, Button, Upload } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
-import type { UploadFile, UploadProps } from "antd";
 import React from "react";
-import { usePostCategory } from "../service/mutation/usePostCategory";
+import { Form, Input, Button, Upload, message } from "antd";
+import type { UploadFile, UploadProps } from "antd";
+import { usePostSubCategory } from "../service/mutation/usePostSubCategory";
 import { SubmitData } from "../../../type";
-
-interface Type {
-  setActive: React.Dispatch<
-    React.SetStateAction<{
-      active: number;
-      title: string;
-      id: number | null;
-    }>
-  >;
-}
-
-export const CreateCategoryComp: React.FC<Type> = (setActive) => {
+import { PlusOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+import { useGetCategoryId } from "../../../service/query/useGetCategoryId";
+import { ActiveType } from "../type";
+export const CreateSubCategory: React.FC<ActiveType> = ({
+  active,
+  title,
+  id,
+}) => {
+  console.log(title, active, id);
+  const { data } = useGetCategoryId(Number(id));
+  const navigate = useNavigate();
   const [fileList, setFileList] = React.useState<UploadFile[]>([]);
-  const { mutate, isPending } = usePostCategory();
+  console.log(data);
+
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
     setFileList(newFileList);
-
+  const { mutate, isPending } = usePostSubCategory();
   const submit = (value: SubmitData) => {
     console.log(value);
-
     const formData = new FormData();
-
     formData.append("title", value.title);
     formData.append("image", value.image.file);
-    formData.append("parent", "");
+    formData.append("parent", String(id));
+
     mutate(formData, {
       onSuccess: (res) => {
+        message.success("Subcategory created");
         console.log(res);
-        setActive.setActive({
-          active: 2,
-          title: value.title,
-          id: res?.data?.id,
-        });
+        navigate("/app");
       },
       onError: (error) => {
-        console.log(error);
+        message.error(error.message);
       },
     });
   };
-
   return (
     <Form
-      name="basic"
       layout="vertical"
-      style={{ maxWidth: 600 }}
-      initialValues={{}}
       onFinish={submit}
+      name="subCategory"
+      style={{ maxWidth: "600px" }}
     >
       <Form.Item
-        label="Category"
-        name="title"
-        rules={[{ required: true, message: "Please input category name!" }]}
+        label="Sub category"
+        name={"title"}
+        rules={[
+          { required: true, message: "Please input sub category username!" },
+        ]}
       >
         <Input />
       </Form.Item>
@@ -76,11 +72,9 @@ export const CreateCategoryComp: React.FC<Type> = (setActive) => {
           )}
         </Upload.Dragger>
       </Form.Item>
-      <Form.Item>
-        <Button loading={isPending} type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
+      <Button loading={isPending} htmlType="submit" type="primary">
+        Send
+      </Button>
     </Form>
   );
 };

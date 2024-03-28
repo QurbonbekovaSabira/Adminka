@@ -1,12 +1,12 @@
 import { useGetCategory } from "../../service/query/useGetCategory";
-import { Table, Space, Button } from "antd";
+import { Table, Space, Button, message, Image } from "antd";
 import type { TableProps } from "antd";
 import { useDeleteCategory } from "../../service/mutation/useDeleteCategory";
 import { DataType } from "./type";
 import { nanoid } from "@reduxjs/toolkit";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Skeleton, Image } from "antd";
+import { SkeletonTable } from "../../components/skeleton-table";
 export const Category = () => {
   const [id, setId] = React.useState<DataType>({
     id: 0,
@@ -21,9 +21,11 @@ export const Category = () => {
     mutate(undefined, {
       onSuccess: (res) => {
         console.log(res);
+        message.success("Delete category");
       },
       onError: (error) => {
         console.log(error);
+        message.error(error.message);
       },
     });
   };
@@ -45,7 +47,7 @@ export const Category = () => {
         return (
           <div>
             <Image
-              style={{ width: "80px", height: "80px" }}
+              style={{ width: "50px", height: "50px", objectFit: "contain" }}
               src={img}
               alt="img"
             />
@@ -71,94 +73,22 @@ export const Category = () => {
       ),
     },
   ];
-  const data = userData?.results?.map((item) => ({
+  const data = userData?.results?.map((item: DataType) => ({
     title: item.title,
     image: item.image,
     id: item.id,
   }));
   if (isLoading) {
-    return (
-      <div style={{ paddingTop: "35px" }}>
-        <div style={{ marginBottom: "30px" }}>
-          <Skeleton.Button block={false} active={false} size="large" />
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            width: "80%",
-            marginBottom: "20px",
-          }}
-        >
-          <Skeleton.Input active={true} size="large" />
-          <Skeleton.Button block={false} active={false} size="default" />
-          <Skeleton.Image active />
-          <Space>
-            <Skeleton.Button block={false} active={false} size="default" />
-            <Skeleton.Button block={false} active={false} size="default" />
-          </Space>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            width: "80%",
-            marginBottom: "20px",
-          }}
-        >
-          <Skeleton.Input active={true} size="large" />
-          <Skeleton.Button block={false} active={false} size="default" />
-          <Skeleton.Image active />
-          <Space>
-            <Skeleton.Button block={false} active={false} size="default" />
-            <Skeleton.Button block={false} active={false} size="default" />
-          </Space>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            width: "80%",
-            marginBottom: "20px",
-          }}
-        >
-          <Skeleton.Input active={true} size="large" />
-          <Skeleton.Button block={false} active={false} size="default" />
-          <Skeleton.Image active />
-          <Space>
-            <Skeleton.Button block={false} active={false} size="default" />
-            <Skeleton.Button block={false} active={false} size="default" />
-          </Space>
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            width: "80%",
-            marginBottom: "20px",
-          }}
-        >
-          <Skeleton.Input active={true} size="large" />
-          <Skeleton.Button block={false} active={false} size="default" />
-          <Skeleton.Image active />
-          <Space>
-            <Skeleton.Button block={false} active={false} size="default" />
-            <Skeleton.Button block={false} active={false} size="default" />
-          </Space>
-        </div>
-      </div>
-    );
+    return <SkeletonTable />;
   }
   return (
     <div>
       <div style={{ marginBottom: "40px" }}>
-        <Button onClick={() => navigate("/app/create-category")} type="primary">
+        <Button
+          size="large"
+          onClick={() => navigate("/app/create-category")}
+          type="primary"
+        >
           Create Category
         </Button>
       </div>

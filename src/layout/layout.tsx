@@ -2,17 +2,33 @@ import React from "react";
 import { Layout, Menu, theme } from "antd";
 import { Link, Navigate, Outlet } from "react-router-dom";
 import { Cookies } from "typescript-cookie";
-
+import { useLocation } from "react-router-dom";
 const { Content, Sider } = Layout;
 
 const SideBarDatas = [
   {
-    key: 1,
-    label: <Link to="/app">Category</Link>,
+    key: "/app",
+    label: (
+      <Link to="/app">
+        <h4>Category</h4>
+      </Link>
+    ),
   },
   {
-    key: 2,
-    label: <Link to="/app/subCategory">Sub Category</Link>,
+    key: "/app/subCategory",
+    label: (
+      <Link to="/app/subCategory">
+        <h4>Sub Category</h4>
+      </Link>
+    ),
+  },
+  {
+    key: "/app/brand",
+    label: (
+      <Link to={"/app/brand"}>
+        <h4>Brand</h4>
+      </Link>
+    ),
   },
 ];
 
@@ -28,6 +44,23 @@ export const MainLayout: React.FC = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+  const location = useLocation();
+  const [active, setActive] = React.useState(
+    () => localStorage.getItem("activeMenuItem") || location.pathname
+  );
+
+  React.useEffect(() => {
+    if (location.pathname === "/app/create-category") {
+      setActive("/app");
+      console.log(active);
+    } else {
+      setActive(location.pathname);
+      console.log(active);
+
+      localStorage.setItem("activeMenuItem", location.pathname);
+    }
+  }, [location.pathname]);
+  console.log(active);
 
   return (
     <Layout>
@@ -38,7 +71,7 @@ export const MainLayout: React.FC = () => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["1"]}
+          defaultSelectedKeys={[active]}
           items={items}
         />
       </Sider>

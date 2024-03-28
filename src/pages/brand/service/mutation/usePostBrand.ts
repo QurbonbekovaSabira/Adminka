@@ -1,14 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
 import { requst } from "../../../../config/request";
-// import { CategoryCreateType } from "../../type";
-import { CategoryType } from "../../../category/type";
-export const usePostCategory = () => {
-  return useMutation({
-    mutationFn: (data: FormData) => {
-      console.log(data);
 
+export const usePostBrand = () => {
+  return useMutation({
+    mutationKey: ["post-brand"],
+    mutationFn: (data: FormData) => {
       return requst
-        .post<CategoryType>("/category/", data, {
+        .post("/brand/", data, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

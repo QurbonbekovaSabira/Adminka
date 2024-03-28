@@ -1,26 +1,22 @@
-import { useGetSubCategory } from "./service/query/useGetSubCategory";
-import { Table, Image, Space, Button } from "antd";
+import { useGetBrand } from "./service/query/useGetBrand";
+import { Table, Space, Button, message, Image } from "antd";
 import type { TableProps } from "antd";
 import { nanoid } from "@reduxjs/toolkit";
-import { useNavigate } from "react-router-dom";
-import { DataType } from "../category/type";
-import { useDeleteCategory } from "../../service/mutation/useDeleteCategory";
 import { SkeletonTable } from "../../components/skeleton-table";
+import { DataType } from "../category/type";
+import { useDeleteBrand } from "./service/mutation/useDeleteBrand";
 import React from "react";
-export const SubCategory = () => {
-  const { data, isLoading } = useGetSubCategory();
-  const [id, setID] = React.useState<DataType>({
-    id: 0,
-    title: "lorem",
-    image: "lorem",
-  });
-  const { mutate, isPending } = useDeleteCategory(id);
+import { useNavigate } from "react-router-dom";
+export const Brand = () => {
   const navigate = useNavigate();
-  const deleteSubCategory = (allData: DataType) => {
-    setID(allData);
+  const { data, isLoading } = useGetBrand();
+  const [deleteId, setId] = React.useState<number | undefined>(undefined);
+  const { mutate, isPending } = useDeleteBrand(deleteId);
+  const submit = (id: number) => {
+    setId(id);
     mutate(undefined, {
-      onSuccess: (res) => {
-        console.log(res);
+      onSuccess: () => {
+        message.success("Delete <brand");
       },
       onError: (error) => {
         console.log(error);
@@ -29,7 +25,7 @@ export const SubCategory = () => {
   };
   const columns: TableProps<DataType>["columns"] = [
     {
-      title: "Category",
+      title: "Brand",
       dataIndex: "title",
       key: "title",
     },
@@ -45,7 +41,7 @@ export const SubCategory = () => {
         return (
           <div>
             <Image
-              style={{ width: "80px", height: "80px" }}
+              style={{ width: "80px", height: "80px", objectFit: "cover" }}
               src={img}
               alt="img"
             />
@@ -58,11 +54,15 @@ export const SubCategory = () => {
       dataIndex: "buttons",
       render: (_, allData) => (
         <Space size="middle" key={nanoid()}>
-          <Button onClick={() => deleteSubCategory(allData)} type="primary">
+          <Button
+            onClick={() => submit(allData.id)}
+            loading={isPending}
+            type="primary"
+          >
             Delete
           </Button>
           <Button
-            onClick={() => navigate(`/app/edit-sub-category/${allData.id}`)}
+            onClick={() => navigate(`/app/edit-brand/${allData.id}/`)}
             type="default"
           >
             Edit
@@ -71,25 +71,24 @@ export const SubCategory = () => {
       ),
     },
   ];
-
-  const userData = data?.results?.map((item: any) => ({
+  const userData = data?.results?.map((item: DataType) => ({
     title: item.title,
     image: item.image,
     id: item.id,
   }));
   if (isLoading) {
-    return <SkeletonTable />;
+    <SkeletonTable />;
   }
+
   return (
     <div>
-      <div style={{ marginBottom: "40px" }}>
+      <div style={{ marginBottom: "30px" }}>
         <Button
-          size="large"
-          loading={isPending}
-          onClick={() => navigate("/app/create-sub-category")}
+          onClick={() => navigate("/app/create-brand")}
           type="primary"
+          size="large"
         >
-          Create Subcategory
+          Create Brand
         </Button>
       </div>
       <Table columns={columns} dataSource={userData} />

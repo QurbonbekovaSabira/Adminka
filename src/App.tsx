@@ -3,7 +3,10 @@ import { Routes, Route } from "react-router-dom";
 import { mainRoutes } from "./routes/main-routes";
 import { MainLayout } from "./layout/layout";
 import { nanoid } from "@reduxjs/toolkit";
+import { useScrollToTop } from "./hook/useScrollToTop";
 function App() {
+  useScrollToTop();
+
   return (
     <Routes>
       <Route path="/" element={<Login />} />

@@ -1,9 +1,14 @@
 import { SubCategory } from "../pages/sub-category/sub-category";
 import { Category } from "../pages/category/category";
 import React from "react";
-import { CreateCategory } from "../pages/create-category/create-category";
-import { CreateSubCategory } from "../pages/create-subCategory/create-subCategory";
-import { EditCategory } from "../pages/editCategory/editCategory";
+import { CreateTab } from "../pages/category/components/category-tab";
+import { CreateSubCategory } from "../pages/sub-category/components/create-subCategory";
+import { EditCategory } from "../pages/category/components/edit-category";
+import { EditSubCategory } from "../pages/sub-category/components/edit-subCategory";
+import { Brand } from "../pages/brand/brand";
+import { EditBrand } from "../pages/brand/components/edit-brand";
+import { CreateBrand } from "../pages/brand/components/create-brand";
+import { CreateSubCategoryTab } from "../pages/sub-category/components/create-subCategory-tab";
 interface mainRoutesType {
   component: React.FC;
   path?: string;
@@ -17,15 +22,31 @@ export const mainRoutes: mainRoutesType[] = [
     path: "subCategory",
   },
   {
-    component: CreateCategory,
+    component: CreateTab,
     path: "create-category",
   },
   {
-    component: CreateSubCategory,
+    component: CreateSubCategoryTab,
     path: "create-sub-category",
   },
   {
     component: EditCategory,
     path: "edit-category/:id",
+  },
+  {
+    component: EditSubCategory,
+    path: "edit-sub-category/:id",
+  },
+  {
+    component: Brand,
+    path: "brand",
+  },
+  {
+    component: EditBrand,
+    path: "edit-brand/:id",
+  },
+  {
+    component: CreateBrand,
+    path: "create-brand",
   },
 ];
