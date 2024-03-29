@@ -53,14 +53,17 @@ export const MainLayout: React.FC = () => {
     if (location.pathname === "/app/create-category") {
       setActive("/app");
       console.log(active);
+    }
+    if (location.pathname === "/app/create-sub-category") {
+      setActive("/app/subCategory");
+    }
+    if (location.pathname === "/app/create-brand") {
+      setActive("/app/brand");
     } else {
       setActive(location.pathname);
-      console.log(active);
-
       localStorage.setItem("activeMenuItem", location.pathname);
     }
   }, [location.pathname]);
-  console.log(active);
 
   return (
     <Layout>

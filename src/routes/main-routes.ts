@@ -2,7 +2,6 @@ import { SubCategory } from "../pages/sub-category/sub-category";
 import { Category } from "../pages/category/category";
 import React from "react";
 import { CreateTab } from "../pages/category/components/category-tab";
-import { CreateSubCategory } from "../pages/sub-category/components/create-subCategory";
 import { EditCategory } from "../pages/category/components/edit-category";
 import { EditSubCategory } from "../pages/sub-category/components/edit-subCategory";
 import { Brand } from "../pages/brand/brand";

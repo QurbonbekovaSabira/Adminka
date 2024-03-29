@@ -1,22 +1,26 @@
 import { useParams } from "react-router-dom";
 import { useGetCategoryId } from "../../../service/query/useGetCategoryId";
 import { usePutCategory } from "../service/mutation/usePutCategory";
-import { Skeleton, Tabs, message } from "antd";
+import { Skeleton, Tabs } from "antd";
 import { CategoryForm } from "../../../components/category-form";
 import type { UploadFile, UploadProps } from "antd";
 import { SubmitData } from "../../../type";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-
+import { Table, Space, Button, message, Image } from "antd";
+import type { TableProps } from "antd";
+import { nanoid } from "@reduxjs/toolkit";
+import { DataType } from "../type";
+import { useDeleteCategory } from "../../../service/mutation/useDeleteCategory";
 export const EditCategory = () => {
   const { id } = useParams();
   const [fileList, setFileList] = React.useState<UploadFile[]>([]);
   const navigate = useNavigate();
   const { data, isLoading } = useGetCategoryId(Number(id));
   const { mutate, isPending } = usePutCategory(Number(id));
+  const { mutate: deleteMutate, isPending: deletePending } =
+    useDeleteCategory(data);
   const submit = (value: SubmitData) => {
-    console.log(value);
-
     const formData = new FormData();
     formData.append("title", value.title);
     formData.append("image", value.image.file);
@@ -33,7 +37,69 @@ export const EditCategory = () => {
       },
     });
   };
-
+  const deleteCategory = () => {
+    deleteMutate(undefined, {
+      onSuccess: (res) => {
+        console.log(res);
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    });
+  };
+  const columns: TableProps<DataType>["columns"] = [
+    {
+      title: "Category",
+      dataIndex: "title",
+      key: "title",
+    },
+    {
+      title: "id",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
+      title: "Image",
+      dataIndex: "image",
+      render: (img) => {
+        return (
+          <div>
+            <Image
+              style={{ width: "50px", height: "50px", objectFit: "contain" }}
+              src={img}
+              alt="img"
+            />
+          </div>
+        );
+      },
+    },
+    {
+      title: "Changes",
+      dataIndex: "buttons",
+      render: (_, allData) => (
+        <Space size="middle" key={nanoid()}>
+          <Button
+            loading={deletePending}
+            onClick={deleteCategory}
+            type="primary"
+          >
+            Delete
+          </Button>
+          <Button
+            onClick={() => navigate(`/app/edit-category/${allData.id}`)}
+            type="default"
+          >
+            Edit
+          </Button>
+        </Space>
+      ),
+    },
+  ];
+  const childrenData = data?.children?.map((item: DataType) => ({
+    title: item.title,
+    image: item.image,
+    id: item.id,
+  }));
   const handleChangeInput: UploadProps["onChange"] = ({
     fileList: newFileList,
   }) => setFileList(newFileList);
@@ -56,7 +122,7 @@ export const EditCategory = () => {
         defaultActiveKey="1"
         items={[
           {
-            label: "Tab 1",
+            label: "Category",
             key: "1",
             children: (
               <CategoryForm
@@ -70,7 +136,8 @@ export const EditCategory = () => {
           },
           {
             key: "2",
-            label: <a href="#">Subcategory</a>,
+            label: "Sub category",
+            children: <Table columns={columns} dataSource={childrenData} />,
           },
         ]}
       />
