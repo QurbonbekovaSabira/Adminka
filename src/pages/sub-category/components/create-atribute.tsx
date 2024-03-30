@@ -3,20 +3,15 @@ import { Button, Card, Form, Input, Space, message } from "antd";
 import { ActiveType } from "../../category/type";
 import { usePutAtribut } from "../service/mutation/usePutAtribut";
 import { useNavigate } from "react-router-dom";
-export const CreateAtribute = (active: ActiveType) => {
+import React from "react";
+import { FormTypes } from "../types";
+export const CreateAtribute: React.FC<ActiveType> = (active) => {
   const [form] = Form.useForm();
   const navigete = useNavigate();
   const { mutate, isPending } = usePutAtribut();
-  interface FormTypes {
-    attributes: [
-      {
-        values: [{ value: string }];
-      }
-    ];
-  }
+
 
   const submit = (value: FormTypes) => {
-    console.log(value);
 
     const attributesNew: any = value.attributes?.map((item) => ({
       attribute_id: null,
@@ -26,11 +21,12 @@ export const CreateAtribute = (active: ActiveType) => {
         value_id: null,
       })),
     }));
-
     const data: any = {
       attributes: [...attributesNew],
-      category_id: active?.active.id,
+      category_id: active.id,
     };
+    console.log(data);
+
     mutate(data, {
       onSuccess: () => {
         message.success("Created atributs");
@@ -112,7 +108,7 @@ export const CreateAtribute = (active: ActiveType) => {
 
             <Button
               style={{ border: "blue" }}
-              type="dashed"
+              type="primary"
               onClick={() => add()}
               block
             >

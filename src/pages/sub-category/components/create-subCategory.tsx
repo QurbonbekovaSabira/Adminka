@@ -1,11 +1,11 @@
 import { useGetCategory } from "../../../service/query/useGetCategory";
 import React from "react";
 import type { UploadFile, UploadProps } from "antd";
-import { SubmitData, Type } from "../../../type";
+import { SubmitData } from "../../../type";
 import { usePostCategory } from "../../category/service/mutation/usePostCategory";
 import { SubCategoryFrom } from "../../../components/subCategory-from";
 import { message } from "antd";
-export const CreateSubCategory: React.FC<Type> = (setActive) => {
+export const CreateSubCategory: React.FC<any> = (setActive) => {
   const { mutate, isPending } = usePostCategory();
   const { data } = useGetCategory();
   const item: any = [];
@@ -34,10 +34,12 @@ export const CreateSubCategory: React.FC<Type> = (setActive) => {
     mutate(formData, {
       onSuccess: (res) => {
         message.success("Created sub category");
+        console.log(res.data.id);
+
         setActive.setActive({
-          active: 2,
+          active: "2",
           title: subCategory.title,
-          id: Number(res?.data?.id),
+          id: Number(res.data.id),
         });
       },
       onError: (error) => {

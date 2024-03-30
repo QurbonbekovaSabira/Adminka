@@ -7,6 +7,7 @@ import { nanoid } from "@reduxjs/toolkit";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { SkeletonTable } from "../../components/skeleton-table";
+import { client } from "../../config/query-client";
 export const Category = () => {
   const [id, setId] = React.useState<DataType>({
     id: 0,
@@ -21,6 +22,7 @@ export const Category = () => {
     mutate(undefined, {
       onSuccess: (res) => {
         console.log(res);
+        client.invalidateQueries({ queryKey: ["category"] });
         message.success("Delete category");
       },
       onError: (error) => {

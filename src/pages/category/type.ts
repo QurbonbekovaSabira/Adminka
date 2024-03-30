@@ -5,5 +5,7 @@ export interface DataType {
 }
 
 export interface ActiveType {
-  active: { active: number; title: string; id: null | number };
+  active: string;
+  title: string;
+  id: null | number;
 }

@@ -18,7 +18,7 @@ export interface CategoryType {
 export interface Type {
   setActive: React.Dispatch<
     React.SetStateAction<{
-      active: number;
+      active: string;
       title: string;
       id: number | null;
     }>

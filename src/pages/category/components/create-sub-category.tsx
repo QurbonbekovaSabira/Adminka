@@ -22,7 +22,6 @@ export const CreateSubCategory: React.FC<ActiveType> = ({
     setFileList(newFileList);
   const { mutate, isPending } = usePostSubCategory();
   const submit = (value: SubmitData) => {
-    console.log(value);
     const formData = new FormData();
     formData.append("title", value.title);
     formData.append("image", value.image.file);

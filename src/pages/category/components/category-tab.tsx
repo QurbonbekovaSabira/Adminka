@@ -6,7 +6,7 @@ import { ActiveType } from "../type";
 
 export const CreateTab = () => {
   const [active, setActive] = React.useState<ActiveType>({
-    active: 1,
+    active: "1",
     title: "",
     id: null,
   });

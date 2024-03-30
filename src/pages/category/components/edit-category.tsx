@@ -107,9 +107,16 @@ export const EditCategory = () => {
     image: item.image,
     id: item.id,
   }));
+
+
+  
   const handleChangeInput: UploadProps["onChange"] = ({
     fileList: newFileList,
   }) => setFileList(newFileList);
+
+
+
+
   if (isLoading) {
     return (
       <div>

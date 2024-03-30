@@ -1,18 +1,19 @@
 import { Tabs } from "antd";
 import { CreateSubCategory } from "./create-subCategory";
-import { ActiveType } from "../../category/type";
-import React from "react";
+
 import { CreateAtribute } from "./create-atribute";
+import React from "react";
+import { ActiveType } from "../../category/type";
 export const CreateSubCategoryTab = () => {
   const [active, setActive] = React.useState<ActiveType>({
-    active: 1,
+    active: "1",
     title: "",
     id: null,
   });
+
   return (
     <Tabs
-      activeKey={String(active.active)}
-      // defaultActiveKey="1"
+      activeKey={active.active}
       items={[
         {
           label: "Sub category",
@@ -22,7 +23,7 @@ export const CreateSubCategoryTab = () => {
         {
           label: "Atribute",
           key: "2",
-          children: <CreateAtribute active={active} />,
+          children: <CreateAtribute {...active} />,
         },
       ]}
     />

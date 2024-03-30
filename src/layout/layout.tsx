@@ -50,9 +50,8 @@ export const MainLayout: React.FC = () => {
   );
 
   React.useEffect(() => {
-    if (location.pathname === "/app/create-category") {
+    if (location.pathname == "/app/create-category") {
       setActive("/app");
-      console.log(active);
     }
     if (location.pathname === "/app/create-sub-category") {
       setActive("/app/subCategory");
