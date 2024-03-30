@@ -1,5 +1,3 @@
-
-
 export interface DataType {
   id: number;
   title: string;
@@ -7,7 +5,5 @@ export interface DataType {
 }
 
 export interface ActiveType {
-  active: number;
-  title: string;
-  id: null | number;
+  active: { active: number; title: string; id: null | number };
 }

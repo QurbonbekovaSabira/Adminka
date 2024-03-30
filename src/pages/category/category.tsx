@@ -31,14 +31,14 @@ export const Category = () => {
   };
   const columns: TableProps<DataType>["columns"] = [
     {
-      title: "Category",
-      dataIndex: "title",
-      key: "title",
-    },
-    {
       title: "id",
       dataIndex: "id",
       key: "id",
+    },
+    {
+      title: "Category",
+      dataIndex: "title",
+      key: "title",
     },
     {
       title: "Image",

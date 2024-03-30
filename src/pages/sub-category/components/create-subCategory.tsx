@@ -37,7 +37,7 @@ export const CreateSubCategory: React.FC<Type> = (setActive) => {
         setActive.setActive({
           active: 2,
           title: subCategory.title,
-          id: res?.data?.id,
+          id: Number(res?.data?.id),
         });
       },
       onError: (error) => {

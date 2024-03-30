@@ -1,11 +1,12 @@
 import { useGetSubCategory } from "./service/query/useGetSubCategory";
-import { Table, Image, Space, Button } from "antd";
+import { Table, Image, Space, Button, message } from "antd";
 import type { TableProps } from "antd";
 import { nanoid } from "@reduxjs/toolkit";
 import { useNavigate } from "react-router-dom";
 import { DataType } from "../category/type";
 import { useDeleteCategory } from "../../service/mutation/useDeleteCategory";
 import { SkeletonTable } from "../../components/skeleton-table";
+import { client } from "../../config/query-client";
 import React from "react";
 export const SubCategory = () => {
   const { data, isLoading } = useGetSubCategory();
@@ -19,8 +20,9 @@ export const SubCategory = () => {
   const deleteSubCategory = (allData: DataType) => {
     setID(allData);
     mutate(undefined, {
-      onSuccess: (res) => {
-        console.log(res);
+      onSuccess: () => {
+        message.success("Success");
+        client.invalidateQueries({ queryKey: ["get-subcategory"] });
       },
       onError: (error) => {
         console.log(error);
@@ -29,14 +31,14 @@ export const SubCategory = () => {
   };
   const columns: TableProps<DataType>["columns"] = [
     {
-      title: "Category",
-      dataIndex: "title",
-      key: "title",
-    },
-    {
       title: "id",
       dataIndex: "id",
       key: "id",
+    },
+    {
+      title: "Category",
+      dataIndex: "title",
+      key: "title",
     },
     {
       title: "Image",

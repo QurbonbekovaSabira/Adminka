@@ -24,3 +24,15 @@ export interface Type {
     }>
   >;
 }
+
+export interface AtributType {
+  attributes: {
+    attribut_id: null | number;
+    title: string;
+    values: {
+      value_id: null | number;
+      value: string;
+    }[];
+  };
+  category_id: number;
+}

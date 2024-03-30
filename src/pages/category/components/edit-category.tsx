@@ -18,8 +18,14 @@ export const EditCategory = () => {
   const navigate = useNavigate();
   const { data, isLoading } = useGetCategoryId(Number(id));
   const { mutate, isPending } = usePutCategory(Number(id));
+  const [deleteId, setId] = React.useState<DataType>({
+    id: 0,
+    title: "",
+    image: "",
+  });
   const { mutate: deleteMutate, isPending: deletePending } =
-    useDeleteCategory(data);
+    useDeleteCategory(deleteId);
+
   const submit = (value: SubmitData) => {
     const formData = new FormData();
     formData.append("title", value.title);
@@ -37,7 +43,8 @@ export const EditCategory = () => {
       },
     });
   };
-  const deleteCategory = () => {
+  const deleteCategory = (allData: DataType) => {
+    setId(allData);
     deleteMutate(undefined, {
       onSuccess: (res) => {
         console.log(res);
@@ -49,14 +56,14 @@ export const EditCategory = () => {
   };
   const columns: TableProps<DataType>["columns"] = [
     {
-      title: "Category",
-      dataIndex: "title",
-      key: "title",
-    },
-    {
       title: "id",
       dataIndex: "id",
       key: "id",
+    },
+    {
+      title: "Category",
+      dataIndex: "title",
+      key: "title",
     },
     {
       title: "Image",
@@ -80,7 +87,7 @@ export const EditCategory = () => {
         <Space size="middle" key={nanoid()}>
           <Button
             loading={deletePending}
-            onClick={deleteCategory}
+            onClick={() => deleteCategory(allData)}
             type="primary"
           >
             Delete
