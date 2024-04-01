@@ -25,7 +25,6 @@ export const CreateAtribute: React.FC<ActiveType> = (active) => {
       attributes: [...attributesNew],
       category_id: active.id,
     };
-    console.log(data);
 
     mutate(data, {
       onSuccess: () => {

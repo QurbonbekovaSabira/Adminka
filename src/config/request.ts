@@ -1,5 +1,4 @@
 import axios from "axios";
-// import { getCookie } from "typescript-cookie";
 import { Cookies } from "typescript-cookie";
 
 const requst = axios.create({

@@ -93,7 +93,7 @@ export const EditCategory = () => {
             Delete
           </Button>
           <Button
-            onClick={() => navigate(`/app/edit-category/${allData.id}`)}
+            onClick={() => navigate(`/app/edit-sub-category/${allData.id}`)}
             type="default"
           >
             Edit

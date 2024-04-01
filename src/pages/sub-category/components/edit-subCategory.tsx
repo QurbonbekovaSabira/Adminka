@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useGetCategoryId } from "../../../service/query/useGetCategoryId";
-import { Tabs, UploadFile, UploadProps, message } from "antd";
+import { Tabs, UploadFile, UploadProps, message, Spin } from "antd";
 import { CategoryForm } from "../../../components/category-form";
 import React from "react";
 import { usePutCategory } from "../../category/service/mutation/usePutCategory";
@@ -9,12 +9,9 @@ import { EditAtribut } from "./edit-atribut";
 
 export const EditSubCategory = () => {
   const { id } = useParams();
-  console.log(id);
-  const { data } = useGetCategoryId(Number(id));
+  const { data, isPending } = useGetCategoryId(Number(id));
   const [fileList, setFileList] = React.useState<UploadFile[]>([]);
   const { mutate, isPending: editIsPending } = usePutCategory(Number(id));
-
-  console.log(data?.attributes);
 
   const submit = (value: SubmitData) => {
     console.log(value);
@@ -34,6 +31,9 @@ export const EditSubCategory = () => {
   const handleChangeInput: UploadProps["onChange"] = ({
     fileList: newFileList,
   }) => setFileList(newFileList);
+  if (isPending) {
+    <Spin />;
+  }
   return (
     <div>
       <Tabs
@@ -42,7 +42,9 @@ export const EditSubCategory = () => {
           {
             label: "Sub category",
             key: "1",
-            children: (
+            children: isPending ? (
+              <Spin />
+            ) : (
               <CategoryForm
                 fileList={fileList}
                 loading={editIsPending}
