@@ -23,7 +23,6 @@ export const CreateTab = () => {
         },
         {
           label: "Sub category",
-          disabled: true,
           key: "2",
           children: <CreateSubCategory {...active} />,
         },

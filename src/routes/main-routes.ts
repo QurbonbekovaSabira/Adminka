@@ -8,6 +8,8 @@ import { Brand } from "../pages/brand/brand";
 import { EditBrand } from "../pages/brand/components/edit-brand";
 import { CreateBrand } from "../pages/brand/components/create-brand";
 import { CreateSubCategoryTab } from "../pages/sub-category/components/create-subCategory-tab";
+import { Atribute } from "../pages/atribute/atribute";
+import { NotFound } from "../pages/not-found/not-found";
 interface mainRoutesType {
   component: React.FC;
   path?: string;
@@ -47,5 +49,13 @@ export const mainRoutes: mainRoutesType[] = [
   {
     component: CreateBrand,
     path: "create-brand",
+  },
+  {
+    component: Atribute,
+    path: "atribute",
+  },
+  {
+    component: NotFound,
+    path: "*",
   },
 ];

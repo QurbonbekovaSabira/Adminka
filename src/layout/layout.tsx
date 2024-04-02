@@ -30,6 +30,14 @@ const SideBarDatas = [
       </Link>
     ),
   },
+  {
+    key: "/app/atribute",
+    label: (
+      <Link to={"/app/atribute"}>
+        <h4>Atribute</h4>
+      </Link>
+    ),
+  },
 ];
 
 const items = SideBarDatas.map((item) => ({

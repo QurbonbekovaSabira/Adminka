@@ -6,7 +6,8 @@ import { useGetCategoryId } from "../../../service/query/useGetCategoryId";
 import { useDeleteAtributeValues } from "../service/mutation/useDeleteAtributeValues";
 import { useDeleteAtribute } from "../service/mutation/useDeleteAtribute";
 import { usePutAtribut } from "../service/mutation/usePutAtribut";
-import { AtributType } from "../../../type";
+import { useNavigate } from "react-router-dom";
+import { client } from "../../../config/query-client";
 interface Props {
   id: string | undefined;
 }
@@ -21,36 +22,24 @@ export const EditAtribut: React.FC<Props> = ({ id }) => {
   const { mutate } = useDeleteAtributeValues(deleteId);
   const { mutate: atributeMutate } = useDeleteAtribute(deleteAtributeId);
   const { data } = useGetCategoryId(Number(id));
-  console.log(data.attributes);
 
+  const navigete = useNavigate();
+  
   const submit = (value: FormTypes) => {
-    let newAtribute = [];
-    console.log(value);
-
-    for (let item of value?.attributes) {
-      for (let atribut of data.attributes) {
-        if (item.title === atribut.title) {
-          newAtribute.push({
-            title: item.title,
-            attribute_id: atribut.id,
-            values: item.values.map((key, i) =>
-              key.value === atribut?.values[i]?.title
-                ? { value: key.value, value_id: atribut.values[i].id }
-                : { value: key.value, value_id: null }
-            ),
-          });
-        } else {
-          newAtribute.push({
-            attribute_id: null,
-            title: item.title,
-            values: item.values.map((newValue) => ({
-              value: newValue.value,
-              value_id: null,
-            })),
-          });
-        }
-      }
-    }
+    let newAtribute = value.attributes.map((item, i) => ({
+      attribute_id: data?.attributes[i]?.id ? data.attributes[i].id : null,
+      title: data?.attributes[i]?.title
+        ? data.attributes[i]?.title
+        : item.title,
+      values: item.values.map((title, j) => ({
+        value: data?.attributes[i]?.values[j]?.value
+          ? data.attributes[i]?.values[j]?.value
+          : title.value,
+        value_id: data?.attributes[i]?.values[j]?.id
+          ? data.attributes[i]?.values[j]?.id
+          : null,
+      })),
+    }));
 
     const newAtributeValue: any = {
       attributes: [...newAtribute],
@@ -60,6 +49,7 @@ export const EditAtribut: React.FC<Props> = ({ id }) => {
     editMutate(newAtributeValue, {
       onSuccess: () => {
         message.success("Successfully Edited");
+        navigete("/app/subCategory");
       },
       onError: (error) => {
         message.error(error.message);
@@ -71,6 +61,7 @@ export const EditAtribut: React.FC<Props> = ({ id }) => {
     setDeleteId(id);
     mutate(undefined, {
       onSuccess: () => {
+        client.invalidateQueries({ queryKey: ["category-id"] });
         message.success("Successfully");
       },
       onError(error) {
@@ -79,7 +70,6 @@ export const EditAtribut: React.FC<Props> = ({ id }) => {
     });
   };
   const deleteAtribute = (id: number) => {
-    console.log(id);
     setDeleteAtribute(id);
     atributeMutate(undefined, {
       onSuccess: () => {
@@ -102,9 +92,8 @@ export const EditAtribut: React.FC<Props> = ({ id }) => {
         name="dynamic_form_complex"
         style={{ maxWidth: 600 }}
         autoComplete="off"
-        initialValues={{ attributes: [{}] }}
       >
-        <Form.List name="attributes">
+        <Form.List name="attributes" initialValue={data?.attributes}>
           {(fields, { add, remove }) => (
             <div
               style={{ display: "flex", rowGap: 16, flexDirection: "column" }}
@@ -123,8 +112,8 @@ export const EditAtribut: React.FC<Props> = ({ id }) => {
                           }}
                         />
                       )}
-                      {data.attributes[field.name] &&
-                        !(data?.attributes[field.name].values.length > 0) && (
+                      {data?.attributes[field.name] &&
+                        data.attributes[field.name].values.length <= 0 && (
                           <CloseOutlined
                             onClick={() => {
                               remove(field.name);
@@ -143,11 +132,7 @@ export const EditAtribut: React.FC<Props> = ({ id }) => {
                     </>
                   }
                 >
-                  <Form.Item
-                    initialValue={data?.attributes[field.name]?.title}
-                    label="Name"
-                    name={[field.name, "title"]}
-                  >
+                  <Form.Item label="Name" name={[field.name, "title"]}>
                     <Input />
                   </Form.Item>
                   <Form.Item label="List">
@@ -163,11 +148,6 @@ export const EditAtribut: React.FC<Props> = ({ id }) => {
                           {subFields.map((subField) => (
                             <Space key={subField.key}>
                               <Form.Item
-                                initialValue={
-                                  data?.attributes[field.name]?.values[
-                                    subField.key
-                                  ]?.value
-                                }
                                 noStyle
                                 name={[subField.name, "value"]}
                               >
@@ -177,11 +157,11 @@ export const EditAtribut: React.FC<Props> = ({ id }) => {
                                 onClick={() => {
                                   subOpt.remove(subField.name);
                                   <>
-                                    {data?.attributes[field.name]?.values[
+                                    {data?.attributes[field.key]?.values[
                                       subField.key
                                     ] &&
                                       deleteAtributValue(
-                                        data?.attributes[field.name]?.values[
+                                        data?.attributes[field.key]?.values[
                                           subField.key
                                         ]?.id
                                       )}
@@ -211,7 +191,12 @@ export const EditAtribut: React.FC<Props> = ({ id }) => {
         </Form.List>
 
         <div style={{ marginTop: "25px" }}>
-          <Button htmlType="submit" type="primary" size="large">
+          <Button
+            loading={editPending}
+            htmlType="submit"
+            type="primary"
+            size="large"
+          >
             Send
           </Button>
         </div>

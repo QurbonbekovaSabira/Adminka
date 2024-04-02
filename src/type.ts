@@ -36,3 +36,23 @@ export interface AtributType {
   };
   category_id: number;
 }
+
+export interface CategoryIdType {
+  id: number;
+  title: string;
+  image: string;
+  attributes: {
+    id: number;
+    title: string;
+    values: {
+      id: number;
+      value: string;
+    }[];
+  }[];
+  children: null;
+  parent: {
+    id: number;
+    title: string;
+  };
+}
+[];
