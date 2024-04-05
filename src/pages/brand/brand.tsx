@@ -10,7 +10,6 @@ import {
 } from "antd";
 import type { TableProps } from "antd";
 import { nanoid } from "@reduxjs/toolkit";
-import { SkeletonTable } from "../../components/skeleton-table";
 import { DataType } from "../category/type";
 import { useDeleteBrand } from "./service/mutation/useDeleteBrand";
 import React, { BaseSyntheticEvent } from "react";
@@ -35,8 +34,7 @@ export const Brand = () => {
   const [type, setType] = React.useState<string>("id");
   const [text, setText] = React.useState<string | undefined>(undefined);
   const inputText = useDebounce(text);
-  const { data: searchData, isLoading: searchLoading } =
-    useGetSearchBrand(inputText);
+  const { data: searchData } = useGetSearchBrand(inputText);
 
   const search = (value: BaseSyntheticEvent) => {
     if (value.target.value.length >= 2) {
