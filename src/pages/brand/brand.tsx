@@ -1,17 +1,84 @@
-import { useGetBrand } from "./service/query/useGetBrand";
-import { Table, Space, Button, message, Image } from "antd";
+import { Table, Space, Button, message, Image, Select, Input } from "antd";
 import type { TableProps } from "antd";
 import { nanoid } from "@reduxjs/toolkit";
 import { SkeletonTable } from "../../components/skeleton-table";
 import { DataType } from "../category/type";
 import { useDeleteBrand } from "./service/mutation/useDeleteBrand";
-import React from "react";
+import React, { BaseSyntheticEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { useFilterBrand } from "./service/query/useFilterBrand";
+import {
+  SearchOutlined,
+  ArrowDownOutlined,
+  ArrowUpOutlined,
+} from "@ant-design/icons";
+import { useGetSearchBrand } from "./service/query/useGetSearchBrand";
+import useDebounce from "../../hook/useDebounce";
+interface Type {
+  title: string;
+  id: number;
+  image: string;
+}
 export const Brand = () => {
   const navigate = useNavigate();
-  const { data, isLoading } = useGetBrand();
   const [deleteId, setId] = React.useState<number | undefined>(undefined);
   const { mutate, isPending } = useDeleteBrand(deleteId);
+  const [type, setType] = React.useState<string>("id");
+
+  const [text, setText] = React.useState<string | undefined>(undefined);
+  const inputText = useDebounce(text);
+  const { data: searchData, isPending: searchPending } =
+    useGetSearchBrand(inputText);
+
+  const search = (value: BaseSyntheticEvent) => {
+    if (value.target.value.length > 2) {
+      setText(value.target.value);
+    }
+    if (value.target.value.length <= 2) {
+      setText(undefined);
+    }
+  };
+  const chnageSelect = (text: string) => {
+    setType(text);
+  };
+  const { data, isLoading } = useFilterBrand(type);
+  const options = [
+    {
+      label: (
+        <p>
+          ID <ArrowUpOutlined />
+        </p>
+      ),
+      value: "id",
+    },
+    {
+      label: (
+        <p>
+          ID <ArrowDownOutlined />
+        </p>
+      ),
+      value: "-id",
+    },
+
+    {
+      label: (
+        <p>
+          Title <ArrowUpOutlined />
+        </p>
+      ),
+      value: "title",
+    },
+
+    {
+      label: (
+        <p>
+          Title <ArrowDownOutlined />
+        </p>
+      ),
+      value: "-title",
+    },
+  ];
+
   const submit = (id: number) => {
     setId(id);
     mutate(undefined, {
@@ -23,7 +90,13 @@ export const Brand = () => {
       },
     });
   };
+  let n = 1;
   const columns: TableProps<DataType>["columns"] = [
+    {
+      title: "O/N",
+      dataIndex: "num",
+      key: "num",
+    },
     {
       title: "Brand",
       dataIndex: "title",
@@ -62,7 +135,7 @@ export const Brand = () => {
             Delete
           </Button>
           <Button
-            onClick={() => navigate(`/app/edit-brand/${allData.id}/`)}
+            onClick={() => navigate(`/app/edit-brand/${allData.id}`)}
             type="default"
           >
             Edit
@@ -75,14 +148,24 @@ export const Brand = () => {
     title: item.title,
     image: item.image,
     id: item.id,
+    num: n++,
   }));
+
   if (isLoading) {
     <SkeletonTable />;
   }
 
   return (
     <div>
-      <div style={{ marginBottom: "30px" }}>
+      <div
+        style={{
+          marginBottom: "30px",
+          display: "flex",
+          justifyContent: "space-between",
+          width: "90%",
+          alignItems: "center",
+        }}
+      >
         <Button
           onClick={() => navigate("/app/create-brand")}
           type="primary"
@@ -90,6 +173,76 @@ export const Brand = () => {
         >
           Create Brand
         </Button>
+        <div style={{ position: "relative" }}>
+          <Input
+            style={{ width: "650px" }}
+            size="large"
+            addonAfter={<SearchOutlined />}
+            placeholder="large size"
+            onChange={search}
+          />
+          {text !== undefined && text?.length > 2 && !searchPending && (
+            <div
+              style={{
+                zIndex: "100",
+                position: "absolute",
+                top: "50px",
+                width: "100%",
+                background: "#fff",
+                display: "flex",
+                gap: "15px",
+                flexDirection: "column",
+                paddingTop: "15px",
+                paddingBottom: "15px",
+                boxShadow: " 8px 8px 24px 0px rgba(66, 68, 90, 1)",
+                height: "500px",
+                overflowY: "scroll",
+              }}
+              className="boxScroll"
+            >
+              {searchData?.results?.map((i: Type, index: number) => {
+                return (
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "30px",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      cursor: "pointer",
+                      padding: "10px",
+                      paddingLeft: "30px",
+                      paddingRight: "30px",
+                    }}
+                    className="box"
+                    key={index}
+                    onClick={() => navigate(`/app/edit-brand/${i.id}`)}
+                  >
+                    <h4>{i.title}</h4>
+                    <img
+                      style={{
+                        width: "40px",
+                        border: "1px solid #00000045",
+                        padding: "4px",
+                      }}
+                      src={i.image}
+                      alt=""
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+        <Space wrap>
+          <Select
+            size="large"
+            style={{ width: "200px" }}
+            defaultValue={type}
+            key={nanoid()}
+            options={options}
+            onChange={chnageSelect}
+          />
+        </Space>
       </div>
       <Table columns={columns} dataSource={userData} />
     </div>

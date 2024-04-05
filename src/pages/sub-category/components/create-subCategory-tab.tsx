@@ -1,6 +1,5 @@
 import { Tabs } from "antd";
 import { CreateSubCategory } from "./create-subCategory";
-
 import { CreateAtribute } from "./create-atribute";
 import React from "react";
 import { ActiveType } from "../../category/type";

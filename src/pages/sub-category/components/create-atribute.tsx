@@ -10,9 +10,7 @@ export const CreateAtribute: React.FC<ActiveType> = (active) => {
   const navigete = useNavigate();
   const { mutate, isPending } = usePutAtribut();
 
-
   const submit = (value: FormTypes) => {
-
     const attributesNew: any = value.attributes?.map((item) => ({
       attribute_id: null,
       title: item?.title,
@@ -69,7 +67,7 @@ export const CreateAtribute: React.FC<ActiveType> = (active) => {
                   <Input />
                 </Form.Item>
 
-                <Form.Item label="Atribut type">
+                <Form.Item label="Atribut variant">
                   <Form.List name={[field.name, "values"]}>
                     {(subFields, subOpt) => (
                       <div

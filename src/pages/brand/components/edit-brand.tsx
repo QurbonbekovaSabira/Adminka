@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { CategoryForm } from "../../../components/category-form";
-import type { UploadFile, UploadProps } from "antd";
+import { message, type UploadFile, type UploadProps } from "antd";
 import { useEditBrand } from "../service/mutation/useEditBrand";
 import React from "react";
 import { SubmitData } from "../../../type";
@@ -12,7 +12,7 @@ export const EditBrand = () => {
 
   const { mutate, isPending } = useEditBrand(Number(id));
   const { data } = useGetBrandId(Number(id));
-  console.log(data);
+
 
   const [fileList, setFileList] = React.useState<UploadFile[]>([]);
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
@@ -27,7 +27,7 @@ export const EditBrand = () => {
         navigate("/app/brand");
       },
       onError: (error) => {
-        console.log(error);
+        message.error(error.message)
       },
     });
   };

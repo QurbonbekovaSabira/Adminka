@@ -29,16 +29,22 @@ export const SubCategory = () => {
       },
     });
   };
+  let n = 1;
   const columns: TableProps<DataType>["columns"] = [
     {
-      title: "id",
-      dataIndex: "id",
-      key: "id",
+      title: "O/N",
+      dataIndex: "num",
+      key: "num",
     },
     {
       title: "Category",
       dataIndex: "title",
       key: "title",
+    },
+    {
+      title: "id",
+      dataIndex: "id",
+      key: "id",
     },
     {
       title: "Image",
@@ -78,6 +84,7 @@ export const SubCategory = () => {
     title: item.title,
     image: item.image,
     id: item.id,
+    num: n++,
   }));
   if (isLoading) {
     return <SkeletonTable />;

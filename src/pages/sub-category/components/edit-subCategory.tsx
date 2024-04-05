@@ -9,7 +9,7 @@ import { EditAtribut } from "./edit-atribut";
 
 export const EditSubCategory = () => {
   const { id } = useParams();
-  const { data, isPending } = useGetCategoryId(Number(id));
+  const { data, isLoading } = useGetCategoryId(Number(id));
   const [fileList, setFileList] = React.useState<UploadFile[]>([]);
   const { mutate, isPending: editIsPending } = usePutCategory(Number(id));
 
@@ -18,7 +18,7 @@ export const EditSubCategory = () => {
     const formData = new FormData();
     formData.append("title", value.title);
     formData.append("image", value.image.file);
-    formData.append("id", data?.id);
+    formData.append("id", String(data?.id));
     mutate(formData, {
       onSuccess: () => {
         message.success("Update Subcategory");
@@ -31,8 +31,8 @@ export const EditSubCategory = () => {
   const handleChangeInput: UploadProps["onChange"] = ({
     fileList: newFileList,
   }) => setFileList(newFileList);
-  if (isPending) {
-    <Spin />;
+  if (isLoading) {
+    <Spin size="large" fullscreen />;
   }
   return (
     <div>
@@ -42,15 +42,16 @@ export const EditSubCategory = () => {
           {
             label: "Sub category",
             key: "1",
-            children: isPending ? (
-              <Spin />
-            ) : (
+            children: (
               <CategoryForm
                 fileList={fileList}
                 loading={editIsPending}
                 onFinish={submit}
                 onChange={handleChangeInput}
-                initialValue={{ title: data?.title, image: data?.image }}
+                initialValue={{
+                  title: String(data?.title),
+                  image: String(data?.image),
+                }}
                 name="Sub category"
               />
             ),

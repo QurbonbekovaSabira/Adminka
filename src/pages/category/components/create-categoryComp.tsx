@@ -22,7 +22,7 @@ export const CreateCategoryComp: React.FC<Type> = (setActive) => {
       onSuccess: (res) => {
         message.success("Category cretated");
         setActive.setActive({
-          active: 2,
+          active: "2",
           title: value.title,
           id: res?.data?.id,
         });

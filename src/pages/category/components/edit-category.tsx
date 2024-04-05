@@ -31,7 +31,7 @@ export const EditCategory = () => {
     formData.append("title", value.title);
     formData.append("image", value.image.file);
     formData.append("parent", "");
-    formData.append("id", data?.id);
+    formData.append("id", data.id);
     mutate(formData, {
       onSuccess: () => {
         message.success("category update");
@@ -108,14 +108,9 @@ export const EditCategory = () => {
     id: item.id,
   }));
 
-
-  
   const handleChangeInput: UploadProps["onChange"] = ({
     fileList: newFileList,
   }) => setFileList(newFileList);
-
-
-
 
   if (isLoading) {
     return (

@@ -56,3 +56,15 @@ export interface CategoryIdType {
   };
 }
 [];
+
+export interface ResponseType {
+  count: number;
+  next: null | string;
+  previous: null | string;
+  results: {
+    id: number;
+    title: string;
+    image: string;
+    children: { id: string; title: string; image: string }[];
+  }[];
+}
