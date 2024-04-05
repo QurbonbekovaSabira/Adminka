@@ -1,5 +1,5 @@
 import { useGetCategory } from "../../service/query/useGetCategory";
-import { Table, Space, Button, message, Image, Input } from "antd";
+import { Table, Space, Button, message, Image, Input, Pagination } from "antd";
 import type { TableProps } from "antd";
 import { useDeleteCategory } from "../../service/mutation/useDeleteCategory";
 import { DataType } from "./type";
@@ -53,7 +53,11 @@ export const Category = () => {
 
   const navigate = useNavigate();
   const { mutate } = useDeleteCategory(id);
-  const { data: userData, isLoading } = useGetCategory();
+  const [page, setPage] = React.useState<number>(1);
+  const { data: userData, isLoading } = useGetCategory(page);
+  const pageData = (value: number) => {
+    setPage((value - 1) * 5);
+  };
 
   let n = 1;
   const deleteCategory = (newData: DataType) => {
@@ -120,15 +124,12 @@ export const Category = () => {
       ),
     },
   ];
-  const data = userData?.results?.map((item: DataType) => ({
+  const data = userData?.data.results?.map((item: DataType) => ({
     title: item.title,
     image: item.image,
     id: item.id,
     num: n++,
   }));
-  if (isLoading) {
-    return <SkeletonTable />;
-  }
   return (
     <div>
       <div
@@ -152,7 +153,7 @@ export const Category = () => {
             style={{ width: "650px" }}
             size="large"
             addonAfter={<SearchOutlined />}
-            placeholder="large size"
+            placeholder="Category name"
           />
           {input?.length > 2 && !isPending && (
             <div
@@ -207,7 +208,21 @@ export const Category = () => {
           )}
         </div>
       </div>
-      <Table columns={columns} dataSource={data} />
+      <Table
+        style={{ marginBottom: "30px" }}
+        loading={isLoading}
+        pagination={false}
+        columns={columns}
+        dataSource={data}
+      />
+      <div style={{ display: "flex", justifyContent: "end" }}>
+        <Pagination
+          defaultPageSize={1}
+          total={userData?.pageSize}
+          pageSize={5}
+          onChange={pageData}
+        />
+      </div>
     </div>
   );
 };

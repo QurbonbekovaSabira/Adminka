@@ -3,6 +3,14 @@ import { Layout, Menu, theme } from "antd";
 import { Link, Navigate, Outlet } from "react-router-dom";
 import { Cookies } from "typescript-cookie";
 import { useLocation } from "react-router-dom";
+// import { AppstoreOutlined } from "@ant-design/icons";
+import {
+  AppstoreAddOutlined,
+  GlobalOutlined,
+  PieChartOutlined,
+  AppstoreOutlined,
+} from "@ant-design/icons";
+
 const { Content, Sider } = Layout;
 
 const SideBarDatas = [
@@ -10,7 +18,9 @@ const SideBarDatas = [
     key: "/app",
     label: (
       <Link to="/app">
-        <h4>Category</h4>
+        <h4>
+          <AppstoreOutlined /> Category
+        </h4>
       </Link>
     ),
   },
@@ -18,7 +28,9 @@ const SideBarDatas = [
     key: "/app/subCategory",
     label: (
       <Link to="/app/subCategory">
-        <h4>Sub Category</h4>
+        <h4>
+          <AppstoreAddOutlined /> Sub Category
+        </h4>
       </Link>
     ),
   },
@@ -26,7 +38,9 @@ const SideBarDatas = [
     key: "/app/brand",
     label: (
       <Link to={"/app/brand"}>
-        <h4>Brand</h4>
+        <h4>
+          <GlobalOutlined /> Brand
+        </h4>
       </Link>
     ),
   },
@@ -34,7 +48,9 @@ const SideBarDatas = [
     key: "/app/atribute",
     label: (
       <Link to={"/app/atribute"}>
-        <h4>Atribute</h4>
+        <h4>
+          <PieChartOutlined /> Atribute
+        </h4>
       </Link>
     ),
   },
@@ -74,7 +90,7 @@ export const MainLayout: React.FC = () => {
 
   return (
     <Layout>
-      <Sider style={{ height: "100vh", padding: "25px" }}>
+      <Sider style={{ height: "100vh", paddingTop: "25px" }}>
         <div style={{ marginBottom: "25px" }}>
           <h1 className="amin_title">Admin</h1>
         </div>

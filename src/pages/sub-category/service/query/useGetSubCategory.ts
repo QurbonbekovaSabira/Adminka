@@ -1,24 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
 import { requst } from "../../../../config/request";
-interface Type {
-  count: number;
-  next: string;
-  previous: null;
-  results: {
-    id: number;
-    title: string;
-    image: string;
-    parent: {
-      id: number;
-      title: string;
-    };
-  }[];
-}
-export const useGetSubCategory = () => {
+import { ResponseType } from "../../../../type";
+
+export const useGetSubCategory = (page: number = 1) => {
   return useQuery({
     queryKey: ["get-subcategory"],
     queryFn: () => {
-      return requst.get<Type>("/api/subcategory/").then((res) => res.data);
+      return requst
+        .get<ResponseType>("/api/subcategory/", {
+          params: { offset: page, limit: 5 },
+        })
+        .then((res) => {
+          return {
+            data: res.data,
+            pageSize: Math.ceil(res.data.count),
+          };
+        });
     },
   });
 };

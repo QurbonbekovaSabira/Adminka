@@ -13,6 +13,7 @@ export const EditSubCategory = () => {
   const [fileList, setFileList] = React.useState<UploadFile[]>([]);
   const { mutate, isPending: editIsPending } = usePutCategory(Number(id));
 
+
   const submit = (value: SubmitData) => {
     console.log(value);
     const formData = new FormData();

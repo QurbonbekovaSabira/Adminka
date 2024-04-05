@@ -9,7 +9,7 @@ export const CreateSubCategory: React.FC<any> = (setActive) => {
   const { mutate, isPending } = usePostCategory();
   const { data } = useGetCategory();
   const item: any = [];
-  data?.results?.map((data) =>
+  data?.data?.results?.map((data) =>
     item.push({
       value: data.id,
       label: data.title,

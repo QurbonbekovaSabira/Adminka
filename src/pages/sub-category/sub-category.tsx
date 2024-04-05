@@ -1,5 +1,5 @@
 import { useGetSubCategory } from "./service/query/useGetSubCategory";
-import { Table, Image, Space, Button, message } from "antd";
+import { Table, Image, Space, Button, message, Pagination } from "antd";
 import type { TableProps } from "antd";
 import { nanoid } from "@reduxjs/toolkit";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,7 @@ import { SkeletonTable } from "../../components/skeleton-table";
 import { client } from "../../config/query-client";
 import React from "react";
 export const SubCategory = () => {
+  const [page, setPage] = React.useState<number>(1);
   const { data, isLoading } = useGetSubCategory();
   const [id, setID] = React.useState<DataType>({
     id: 0,
@@ -80,7 +81,7 @@ export const SubCategory = () => {
     },
   ];
 
-  const userData = data?.results?.map((item: any) => ({
+  const userData = data?.data?.results?.map((item: any) => ({
     title: item.title,
     image: item.image,
     id: item.id,
@@ -101,7 +102,20 @@ export const SubCategory = () => {
           Create Subcategory
         </Button>
       </div>
-      <Table columns={columns} dataSource={userData} />
+      <Table
+        style={{ marginBottom: "30px" }}
+        pagination={false}
+        columns={columns}
+        dataSource={userData}
+      />
+      <div style={{ display: "flex", justifyContent: "end" }}>
+        <Pagination
+          onChange={(value) => setPage((value - 1) * 5)}
+          defaultPageSize={1}
+          total={data?.pageSize}
+          pageSize={5}
+        />
+      </div>
     </div>
   );
 };

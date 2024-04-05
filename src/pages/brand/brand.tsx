@@ -1,4 +1,13 @@
-import { Table, Space, Button, message, Image, Select, Input } from "antd";
+import {
+  Table,
+  Space,
+  Button,
+  message,
+  Image,
+  Select,
+  Input,
+  Pagination,
+} from "antd";
 import type { TableProps } from "antd";
 import { nanoid } from "@reduxjs/toolkit";
 import { SkeletonTable } from "../../components/skeleton-table";
@@ -24,24 +33,24 @@ export const Brand = () => {
   const [deleteId, setId] = React.useState<number | undefined>(undefined);
   const { mutate, isPending } = useDeleteBrand(deleteId);
   const [type, setType] = React.useState<string>("id");
-
   const [text, setText] = React.useState<string | undefined>(undefined);
   const inputText = useDebounce(text);
-  const { data: searchData, isPending: searchPending } =
+  const { data: searchData, isLoading: searchLoading } =
     useGetSearchBrand(inputText);
 
   const search = (value: BaseSyntheticEvent) => {
-    if (value.target.value.length > 2) {
+    if (value.target.value.length >= 2) {
       setText(value.target.value);
     }
-    if (value.target.value.length <= 2) {
+    if (value.target.value.length < 2) {
       setText(undefined);
     }
   };
   const chnageSelect = (text: string) => {
     setType(text);
   };
-  const { data, isLoading } = useFilterBrand(type);
+  const [page, setPage] = React.useState<number>(1);
+  const { data, isLoading } = useFilterBrand(type, page);
   const options = [
     {
       label: (
@@ -144,16 +153,12 @@ export const Brand = () => {
       ),
     },
   ];
-  const userData = data?.results?.map((item: DataType) => ({
+  const userData = data?.data?.results?.map((item: DataType) => ({
     title: item.title,
     image: item.image,
     id: item.id,
     num: n++,
   }));
-
-  if (isLoading) {
-    <SkeletonTable />;
-  }
 
   return (
     <div>
@@ -178,10 +183,10 @@ export const Brand = () => {
             style={{ width: "650px" }}
             size="large"
             addonAfter={<SearchOutlined />}
-            placeholder="large size"
+            placeholder="Brand name"
             onChange={search}
           />
-          {text !== undefined && text?.length > 2 && !searchPending && (
+          {text !== undefined && text?.length >= 2 && (
             <div
               style={{
                 zIndex: "100",
@@ -244,7 +249,23 @@ export const Brand = () => {
           />
         </Space>
       </div>
-      <Table columns={columns} dataSource={userData} />
+      <Table
+        style={{ marginBottom: "30px" }}
+        pagination={false}
+        loading={isLoading}
+        columns={columns}
+        dataSource={userData}
+      />
+      <div>
+        <div style={{ display: "flex", justifyContent: "end" }}>
+          <Pagination
+            onChange={(value) => setPage((value - 1) * 5)}
+            defaultPageSize={1}
+            pageSize={5}
+            total={data?.pageSize}
+          />
+        </div>
+      </div>
     </div>
   );
 };
