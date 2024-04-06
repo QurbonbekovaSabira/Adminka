@@ -1,21 +1,22 @@
-import { useGetCategory } from "../../../service/query/useGetCategory";
 import React from "react";
 import type { UploadFile, UploadProps } from "antd";
 import { SubmitData } from "../../../type";
 import { usePostCategory } from "../../category/service/mutation/usePostCategory";
 import { SubCategoryFrom } from "../../../components/subCategory-from";
 import { message } from "antd";
+import { useGetCategoryFull } from "../service/query/useGetCategoryFull";
 export const CreateSubCategory: React.FC<any> = (setActive) => {
   const { mutate, isPending } = usePostCategory();
-  const { data } = useGetCategory();
+  const { data } = useGetCategoryFull();
   const item: any = [];
-  data?.data?.results?.map((data) =>
+  data?.results?.map((data) =>
     item.push({
       value: data.id,
       label: data.title,
       key: data.id,
     })
   );
+  
   const [onChange, setOnChane] = React.useState<string>(item[0]?.key);
   const [fileList, setFileList] = React.useState<UploadFile[]>([]);
   const handleChangeInput: UploadProps["onChange"] = ({

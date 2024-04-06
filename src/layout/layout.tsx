@@ -3,12 +3,12 @@ import { Layout, Menu, theme } from "antd";
 import { Link, Navigate, Outlet } from "react-router-dom";
 import { Cookies } from "typescript-cookie";
 import { useLocation } from "react-router-dom";
-// import { AppstoreOutlined } from "@ant-design/icons";
 import {
   AppstoreAddOutlined,
   GlobalOutlined,
   PieChartOutlined,
   AppstoreOutlined,
+  ShopOutlined,
 } from "@ant-design/icons";
 
 const { Content, Sider } = Layout;
@@ -50,6 +50,16 @@ const SideBarDatas = [
       <Link to={"/app/atribute"}>
         <h4>
           <PieChartOutlined /> Atribute
+        </h4>
+      </Link>
+    ),
+  },
+  {
+    key: "/app/product",
+    label: (
+      <Link to={"/app/product"}>
+        <h4>
+          <ShopOutlined /> Product
         </h4>
       </Link>
     ),

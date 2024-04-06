@@ -18,8 +18,8 @@ interface PropsType {
   onChange: UploadProps["onChange"];
   name?: string;
   initialValue?: {
-    title: string;
-    image: string;
+    title: string | undefined;
+    image: string | undefined;
   };
 }
 export const CategoryForm: React.FC<PropsType> = ({

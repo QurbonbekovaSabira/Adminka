@@ -31,7 +31,9 @@ export const EditCategory = () => {
     formData.append("title", value.title);
     formData.append("image", value.image.file);
     formData.append("parent", "");
-    formData.append("id", data.id);
+
+    formData.append("id", data?.id);
+
     mutate(formData, {
       onSuccess: () => {
         message.success("category update");
@@ -139,7 +141,7 @@ export const EditCategory = () => {
                 loading={isPending}
                 onFinish={submit}
                 onChange={handleChangeInput}
-                initialValue={{ title: data.title, image: data.image }}
+                initialValue={{ title: data?.title, image: data?.image }}
               />
             ),
           },

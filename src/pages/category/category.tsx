@@ -6,7 +6,6 @@ import { DataType } from "./type";
 import { nanoid } from "@reduxjs/toolkit";
 import React, { BaseSyntheticEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { SkeletonTable } from "../../components/skeleton-table";
 import { client } from "../../config/query-client";
 import { SearchOutlined } from "@ant-design/icons";
 import useDebounce from "../../hook/useDebounce";
@@ -215,7 +214,7 @@ export const Category = () => {
         columns={columns}
         dataSource={data}
       />
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ textAlign: "end" }}>
         <Pagination
           defaultPageSize={1}
           total={userData?.pageSize}

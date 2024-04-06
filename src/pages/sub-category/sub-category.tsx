@@ -8,9 +8,14 @@ import { useDeleteCategory } from "../../service/mutation/useDeleteCategory";
 import { SkeletonTable } from "../../components/skeleton-table";
 import { client } from "../../config/query-client";
 import React from "react";
+interface Type {
+  title: string;
+  image: string;
+  id: number;
+}
 export const SubCategory = () => {
   const [page, setPage] = React.useState<number>(1);
-  const { data, isLoading } = useGetSubCategory();
+  const { data, isLoading } = useGetSubCategory(page);
   const [id, setID] = React.useState<DataType>({
     id: 0,
     title: "lorem",
@@ -81,7 +86,7 @@ export const SubCategory = () => {
     },
   ];
 
-  const userData = data?.data?.results?.map((item: any) => ({
+  const userData = data?.data?.results?.map((item: Type) => ({
     title: item.title,
     image: item.image,
     id: item.id,
@@ -108,14 +113,12 @@ export const SubCategory = () => {
         columns={columns}
         dataSource={userData}
       />
-      <div style={{ display: "flex", justifyContent: "end" }}>
-        <Pagination
-          onChange={(value) => setPage((value - 1) * 5)}
-          defaultPageSize={1}
-          total={data?.pageSize}
-          pageSize={5}
-        />
-      </div>
+      <Pagination
+        style={{ textAlign: "end" }}
+        onChange={(page) => setPage((page - 1) * 5)}
+        total={data?.pageSize}
+        pageSize={5}
+      />
     </div>
   );
 };

@@ -1,15 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { requst } from "../../../../config/request";
 import { ResponseType } from "../../../../type";
-
-export const useGetSubCategory = (page: number = 1) => {
+export const useGetProduct = (page: number) => {
   return useQuery({
-    queryKey: ["get-subcategory", page],
+    queryKey: ["get-product", page],
     queryFn: () => {
       return requst
-        .get<ResponseType>("/api/subcategory/", {
-          params: { offset: page, limit: 5 },
-        })
+        .get<ResponseType>("/product/", { params: { offset: page, limit: 5 } })
         .then((res) => {
           return {
             data: res.data,

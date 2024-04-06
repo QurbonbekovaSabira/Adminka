@@ -1,6 +1,14 @@
 import { useGetAtribute } from "./service/query/useGetAtribute";
 import { SkeletonTable } from "../../components/skeleton-table";
-import { Table, Space, Button, message, TableProps, Spin } from "antd";
+import {
+  Table,
+  Space,
+  Button,
+  message,
+  TableProps,
+  Spin,
+  Pagination,
+} from "antd";
 import { nanoid } from "@reduxjs/toolkit";
 import { useDeleteAtribute } from "../../service/mutation/useDeleteAtribute";
 import React from "react";
@@ -20,8 +28,9 @@ interface CategoryType {
   category: string;
 }
 export const Atribute = () => {
+  const [page, setPage] = React.useState<number>(1);
   const [id, setId] = React.useState<null | number>(null);
-  const { data, isPending } = useGetAtribute();
+  const { data, isPending } = useGetAtribute(page);
   const { mutate, isPending: isDeletePending } = useDeleteAtribute(id);
   const navigate = useNavigate();
   const deleteAtribute = (id: number) => {
@@ -82,16 +91,13 @@ export const Atribute = () => {
       ),
     },
   ];
-  const userData = data?.results?.map((item: AtributType) => ({
+  const userData = data?.data.results?.map((item: AtributType) => ({
     title: item.title,
     id: item.id,
     category_title: item?.category_title[0]?.title,
     category: item.category[0],
     num: n++,
   }));
-  if (isPending) {
-    return <SkeletonTable />;
-  }
 
   return (
     <>
@@ -106,7 +112,21 @@ export const Atribute = () => {
         >
           Create Atribute
         </Button>
-        <Table key={nanoid()} columns={columns} dataSource={userData} />
+        <Table
+          style={{ marginBottom: "30px" }}
+          loading={isPending}
+          pagination={false}
+          key={nanoid()}
+          columns={columns}
+          dataSource={userData}
+        />
+        <div style={{ textAlign: "end" }}>
+          <Pagination
+            onChange={(page) => setPage((page + 1) * 5)}
+            total={data?.data.count}
+            pageSize={5}
+          />
+        </div>
       </div>
     </>
   );

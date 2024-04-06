@@ -19,7 +19,7 @@ export const CreateAtributes = () => {
 
   const { mutate } = usePostAtribute();
   const item: any = [];
-  data?.results?.map((data: Type) =>
+  data?.data.results?.map((data: Type) =>
     item.push({
       value: Number(data.id),
       label: data.title,
@@ -28,10 +28,10 @@ export const CreateAtributes = () => {
   );
 
   const options: SelectProps["options"] = [];
-  data?.results.map((item) =>
+  data?.data.results.map((item) =>
     options.push({
       label: item.title,
-      value: item.id, 
+      value: item.id,
       emoji: item.title,
       desc: item.title,
     })

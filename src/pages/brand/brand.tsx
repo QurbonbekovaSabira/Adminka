@@ -49,6 +49,7 @@ export const Brand = () => {
   };
   const [page, setPage] = React.useState<number>(1);
   const { data, isLoading } = useFilterBrand(type, page);
+
   const options = [
     {
       label: (
@@ -255,7 +256,7 @@ export const Brand = () => {
         dataSource={userData}
       />
       <div>
-        <div style={{ display: "flex", justifyContent: "end" }}>
+        <div style={{ textAlign: "end" }}>
           <Pagination
             onChange={(value) => setPage((value - 1) * 5)}
             defaultPageSize={1}

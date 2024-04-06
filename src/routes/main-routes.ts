@@ -12,6 +12,9 @@ import { Atribute } from "../pages/atribute/atribute";
 import { NotFound } from "../pages/not-found/not-found";
 import { CreateAtributes } from "../pages/atribute/components/create-atributes";
 import { AtributePageEditAtribute } from "../pages/atribute/components/atributePage-edit-atribute";
+import { Product } from "../pages/product/product";
+import { ProductCreate } from "../pages/product/components/productCreate";
+import { ProductEdit } from "../pages/product/components/productEdit";
 interface mainRoutesType {
   component: React.FC;
   path?: string;
@@ -67,5 +70,17 @@ export const mainRoutes: mainRoutesType[] = [
   {
     component: AtributePageEditAtribute,
     path: "edit-atribute/:id",
+  },
+  {
+    component: Product,
+    path: "product",
+  },
+  {
+    component: ProductCreate,
+    path: "product-create",
+  },
+  {
+    component: ProductEdit,
+    path: "product-edit/:id",
   },
 ];

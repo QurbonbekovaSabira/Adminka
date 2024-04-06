@@ -1,45 +1,21 @@
 import { CloseOutlined } from "@ant-design/icons";
-import { Button, Card, Form, Input, Space, Spin, message } from "antd";
+import { Button, Card, Form, Input, Space, Spin,  } from "antd";
 import { FormTypes } from "../../sub-category/types";
-import React from "react";
-import { useGetCategoryId } from "../../../service/query/useGetCategoryId";
-import { useDeleteAtributeValues } from "../../sub-category/service/mutation/useDeleteAtributeValues";
-import { usePutAtribut } from "../../sub-category/service/mutation/usePutAtribut";
-import { useNavigate } from "react-router-dom";
-import { client } from "../../../config/query-client";
-import { useParams } from "react-router-dom";
 import { useGetAtributeId } from "../service/query/useGetAtributeId";
-
+import { useParams } from "react-router-dom";
 export const AtributePageEditAtribute = () => {
   const { id } = useParams();
-  const [deleteId, setDeleteId] = React.useState<null | number>(null);
 
   const [form] = Form.useForm();
-  const { mutate: editMutate, isPending: editPending } = usePutAtribut();
-  const { mutate } = useDeleteAtributeValues(deleteId);
   const { data, isLoading } = useGetAtributeId(Number(id));
   console.log(data?.data);
 
-  // const newData=
-
-  const navigete = useNavigate();
 
   const submit = (value: FormTypes) => {
     console.log(value);
   };
 
-  const deleteAtributValue = (id: number) => {
-    setDeleteId(id);
-    mutate(undefined, {
-      onSuccess: () => {
-        client.invalidateQueries({ queryKey: ["category-id"] });
-        message.success("Successfully");
-      },
-      onError(error) {
-        message.error(error.message);
-      },
-    });
-  };
+ 
 
   if (isLoading) {
     return <Spin fullscreen size="large" />;
@@ -134,7 +110,6 @@ export const AtributePageEditAtribute = () => {
 
         <div style={{ marginTop: "25px" }}>
           <Button
-            loading={editPending}
             htmlType="submit"
             type="primary"
             size="large"
