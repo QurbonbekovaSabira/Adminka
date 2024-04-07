@@ -12,7 +12,7 @@ export interface ProductType {
     title: string;
   }[];
 }
-export interface ProductId{
+export interface ProductId {
   category: number;
   id: number;
   image: string;
@@ -37,4 +37,15 @@ export interface ProductResponce {
     }[];
   };
   pageSize: number;
+}
+
+export interface SubmitProduct {
+  title: string;
+  image: {
+    file: File;
+  };
+  isNew: boolean | undefined;
+  is_available: boolean | undefined;
+  price: number;
+  category: number;
 }

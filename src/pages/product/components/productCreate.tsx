@@ -16,16 +16,7 @@ import { useGetSubCategoryFull } from "../../../service/query/useGetSubCategoryF
 import React from "react";
 import { usePostProduct } from "../service/mutation/usePostProduct";
 import { useNavigate } from "react-router-dom";
-interface Type {
-  title: string;
-  image: {
-    file: File;
-  };
-  isNew: boolean | undefined;
-  is_available: boolean | undefined;
-  price: number;
-  category: number;
-}
+import { SubmitProduct } from "../type";
 
 export const ProductCreate = () => {
   const { data } = useGetSubCategoryFull();
@@ -43,8 +34,8 @@ export const ProductCreate = () => {
   const handleChangeInput: UploadProps["onChange"] = ({
     fileList: newFileList,
   }) => setFileList(newFileList);
-  
-  const submit = (value: Type) => {
+
+  const submit = (value: SubmitProduct) => {
     console.log(value);
     const formData = new FormData();
     formData.append("title", value.title);
@@ -61,6 +52,7 @@ export const ProductCreate = () => {
     }
     formData.append("category", String(value.category));
     formData.append("price", value.price.toString());
+   
     mutate(formData, {
       onSuccess: () => {
         message.success("Product created");
@@ -74,7 +66,6 @@ export const ProductCreate = () => {
   return (
     <div>
       <Form onFinish={submit} layout="vertical" style={{ maxWidth: 600 }}>
-        <p style={{ marginBottom: "10px" }}></p>
         <Form.Item
           label="Category"
           name={"category"}

@@ -15,6 +15,8 @@ import { AtributePageEditAtribute } from "../pages/atribute/components/atributeP
 import { Product } from "../pages/product/product";
 import { ProductCreate } from "../pages/product/components/productCreate";
 import { ProductEdit } from "../pages/product/components/productEdit";
+import { ProductVariant } from "../pages/product-variant/product-variant";
+import { CreateProductVariant } from "../pages/product-variant/components/create-product-variant";
 interface mainRoutesType {
   component: React.FC;
   path?: string;
@@ -83,4 +85,12 @@ export const mainRoutes: mainRoutesType[] = [
     component: ProductEdit,
     path: "product-edit/:id",
   },
+  {
+    component: ProductVariant,
+    path: "product-variant",
+  },
+  {
+    component:CreateProductVariant,
+    path:"create-product-variant"
+  }
 ];

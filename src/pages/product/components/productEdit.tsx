@@ -13,28 +13,23 @@ import {
   UploadFile,
   UploadProps,
   Image,
+  message,
 } from "antd";
 import { useGetSubCategoryFull } from "../../../service/query/useGetSubCategoryFull";
 import React from "react";
 import { PlusOutlined } from "@ant-design/icons";
-interface Type {
-  id: number;
-  title: string;
-  image: string;
-  children: {
-    id: string;
-    title: string;
-    image: string;
-  }[];
-}
-[];
+import { SubmitProduct } from "../type";
+import { usePatchProduct } from "../service/mutation/usePatchProduct";
+import { useNavigate } from "react-router-dom";
 
 export const ProductEdit = () => {
+  const { id } = useParams();
+  const [patchId, setId] = React.useState<number | undefined>(1);
+  const navigate = useNavigate();
+  const { mutate, isPending } = usePatchProduct(patchId);
   const [fileList, setFileList] = React.useState<UploadFile[]>([]);
 
-  const { id } = useParams();
   const { data, isLoading } = useGetProductId(Number(id));
-  console.log(data);
 
   const { data: subCategoryData, isLoading: subCategoryLoading } =
     useGetSubCategoryFull();
@@ -50,18 +45,44 @@ export const ProductEdit = () => {
     })
   );
 
-  const submit = (value: string) => {
-    console.log(value);
+  const submit = (value: SubmitProduct) => {
+    setId(Number(id));
+    const formData = new FormData();
+    formData.append("title", value.title);
+    formData.append("image", value.image.file);
+    if (value.isNew === undefined) {
+      formData.append("is_new", "false");
+    } else {
+      formData.append("is_new", String(value.isNew));
+    }
+    if (value.is_available === undefined) {
+      formData.append("is_available", "false");
+    } else {
+      formData.append("is_available", String(value.is_available));
+    }
+    formData.append("category", String(value.category));
+    formData.append("price", value.price.toString());
+    mutate(formData, {
+      onSuccess: () => {
+        message.success("Successfull");
+        navigate("/app/product");
+      },
+      onError: (error) => {
+        message.error(error.message);
+      },
+    });
   };
+  const selectProduct: any = subCategoryData?.results.filter(
+    (item) => item.id === data?.category
+  );
+
+  if (isLoading) {
+    return <Spin fullscreen />;
+  }
   return (
     <div>
-      {(isLoading || subCategoryLoading) && <Spin fullscreen />}
-      <Form
-        initialValues={data}
-        onFinish={submit}
-        layout="vertical"
-        style={{ maxWidth: 600 }}
-      >
+      {subCategoryLoading && <Spin fullscreen />}
+      <Form onFinish={submit} layout="vertical" style={{ maxWidth: 600 }}>
         <p style={{ marginBottom: "10px" }}></p>
         <Form.Item
           label="Category"
@@ -69,25 +90,33 @@ export const ProductEdit = () => {
           style={{ marginBottom: "20px" }}
           rules={[{ required: true }]}
         >
-          <Select options={item} />
+          <Select
+            options={item}
+            defaultValue={selectProduct && selectProduct[0]?.title}
+          />
         </Form.Item>
         <Space>
           <Form.Item label="Is New" name={"is_new"}>
             <Switch />
           </Form.Item>
-
           <Form.Item name={"is_available"} label="Is Available">
             <Switch />
           </Form.Item>
         </Space>
         <Form.Item
+          initialValue={data?.title}
           name="title"
           rules={[{ required: true }]}
           label="Product name"
         >
           <Input />
         </Form.Item>
-        <Form.Item name={"price"} rules={[{ required: true }]} label="Price">
+        <Form.Item
+          initialValue={data?.price}
+          name={"price"}
+          rules={[{ required: true }]}
+          label="Price"
+        >
           <InputNumber
             style={{ width: "100%" }}
             controls={false}
@@ -121,7 +150,12 @@ export const ProductEdit = () => {
             <Image src={data?.image} />
           </div>
         )}
-        <Button type="primary" size="large" htmlType="submit">
+        <Button
+          loading={isPending}
+          type="primary"
+          size="large"
+          htmlType="submit"
+        >
           Send
         </Button>
       </Form>

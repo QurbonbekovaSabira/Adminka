@@ -9,6 +9,7 @@ import {
   PieChartOutlined,
   AppstoreOutlined,
   ShopOutlined,
+  SwitcherOutlined,
 } from "@ant-design/icons";
 
 const { Content, Sider } = Layout;
@@ -60,6 +61,17 @@ const SideBarDatas = [
       <Link to={"/app/product"}>
         <h4>
           <ShopOutlined /> Product
+        </h4>
+      </Link>
+    ),
+  },
+  {
+    key: "/app/product-variant",
+    label: (
+      <Link to={"/app/product-variant"}>
+        <h4>
+          {" "}
+          <SwitcherOutlined /> Product variants
         </h4>
       </Link>
     ),
