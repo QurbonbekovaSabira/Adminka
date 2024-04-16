@@ -8,13 +8,15 @@ export interface SubmitData {
 export interface CategoryType {
   count: number;
   next: null | string;
+  previous: null | string;
   results: {
-    id: number;
+    id: number | undefined;
     title: string;
     image: string;
     children: { id: string; title: string; image: string }[];
   }[];
 }
+
 export interface Type {
   setActive: React.Dispatch<
     React.SetStateAction<{
@@ -49,7 +51,11 @@ export interface CategoryIdType {
       value: string;
     }[];
   }[];
-  children: null;
+  children: {
+    id: number;
+    title: string;
+    image: string;
+  }[];
   parent: {
     id: number;
     title: string;

@@ -199,7 +199,7 @@ export const Brand = () => {
                 paddingTop: "15px",
                 paddingBottom: "15px",
                 boxShadow: " 8px 8px 24px 0px rgba(66, 68, 90, 1)",
-                height: "500px",
+                height: "250px",
                 overflowY: "scroll",
               }}
               className="boxScroll"
@@ -261,6 +261,7 @@ export const Brand = () => {
             onChange={(value) => setPage((value - 1) * 5)}
             defaultPageSize={1}
             pageSize={5}
+            simple
             total={data?.pageSize}
           />
         </div>

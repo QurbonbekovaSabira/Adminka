@@ -5,18 +5,10 @@ import { usePostSubCategory } from "../service/mutation/usePostSubCategory";
 import { SubmitData } from "../../../type";
 import { PlusOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { useGetCategoryId } from "../../../service/query/useGetCategoryId";
 import { ActiveType } from "../type";
-export const CreateSubCategory: React.FC<ActiveType> = ({
-  active,
-  title,
-  id,
-}) => {
-  console.log(title, active, id);
-  const { data } = useGetCategoryId(Number(id));
+export const CreateSubCategory: React.FC<ActiveType> = ({ id }) => {
   const navigate = useNavigate();
   const [fileList, setFileList] = React.useState<UploadFile[]>([]);
-  console.log(data);
 
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
     setFileList(newFileList);
@@ -26,7 +18,6 @@ export const CreateSubCategory: React.FC<ActiveType> = ({
     formData.append("title", value.title);
     formData.append("image", value.image.file);
     formData.append("parent", String(id));
-
     mutate(formData, {
       onSuccess: (res) => {
         message.success("Subcategory created");

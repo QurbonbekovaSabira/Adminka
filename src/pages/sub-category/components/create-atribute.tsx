@@ -11,7 +11,7 @@ export const CreateAtribute: React.FC<ActiveType> = (active) => {
   const { mutate, isPending } = usePutAtribut();
 
   const submit = (value: FormTypes) => {
-    const attributesNew: any = value.attributes?.map((item) => ({
+    const attributesNew = value.attributes?.map((item) => ({
       attribute_id: null,
       title: item?.title,
       values: item.values.map((i) => ({

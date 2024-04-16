@@ -8,17 +8,26 @@ import {
   TableProps,
   Pagination,
   message,
+  Input,
 } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import { DataType } from "../category/type";
-import React from "react";
+import React, { BaseSyntheticEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDeleteProduct } from "./service/mutation/useDeleteProduct";
 import { client } from "../../config/query-client";
+import useDebounce from "../../hook/useDebounce";
+import { useGetSearchProduct } from "./service/query/useGetSearchProduct";
 export const Product = () => {
   const [page, setPage] = React.useState<number>(1);
   const { data, isLoading } = useGetProduct(page);
   const navigate = useNavigate();
   console.log(data?.data.results);
+
+  const [input, setInput] = React.useState<string | undefined>(undefined);
+  let newInput = useDebounce(input);
+  const { data: searchData } = useGetSearchProduct(newInput);
+  console.log(searchData?.results);
 
   const [id, setId] = React.useState<undefined | number>(undefined);
   const { mutate, isPending } = useDeleteProduct(id);
@@ -91,16 +100,92 @@ export const Product = () => {
     id: item.id,
     num: n++,
   }));
+  const changeInput = (value: BaseSyntheticEvent) => {
+    if (value.target.value.length >= 2) {
+      setInput(value.target.value);
+    }
+    if (value.target.value.length < 2) {
+      setInput(undefined);
+    }
+  };
   return (
     <div>
-      <Button
-        onClick={() => navigate("/app/product-create")}
-        style={{ marginBottom: "30px" }}
-        type="primary"
-        size="large"
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          marginBottom: "30px",
+          gap: "150px",
+        }}
       >
-        Create Product
-      </Button>
+        <Button
+          onClick={() => navigate("/app/product-create")}
+          type="primary"
+          size="large"
+        >
+          Create Product
+        </Button>
+        <div style={{ position: "relative" }}>
+          <Input
+            placeholder="Product name"
+            style={{ width: "650px" }}
+            addonAfter={<SearchOutlined />}
+            size="large"
+            onChange={changeInput}
+          />
+          {input !== undefined && input?.length >= 2 && (
+            <div
+              style={{
+                zIndex: "100",
+                position: "absolute",
+                top: "50px",
+                width: "100%",
+                background: "#fff",
+                display: "flex",
+                gap: "15px",
+                flexDirection: "column",
+                paddingTop: "15px",
+                paddingBottom: "15px",
+                boxShadow: " 8px 8px 24px 0px rgba(66, 68, 90, 1)",
+                height: "250px",
+                overflowY: "scroll",
+              }}
+              className="boxScroll"
+            >
+              {searchData?.results.map((i, index) => {
+                return (
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "30px",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      cursor: "pointer",
+                      padding: "10px",
+                      paddingLeft: "30px",
+                      paddingRight: "30px",
+                    }}
+                    className="box"
+                    key={index}
+                    onClick={() => navigate(`/app/product-edit/${i?.id}`)}
+                  >
+                    <h4>{i.title}</h4>
+                    <img
+                      style={{
+                        width: "40px",
+                        border: "1px solid #00000045",
+                        padding: "4px",
+                      }}
+                      src={i.image}
+                      alt=""
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
       <Table
         style={{ marginBottom: "30px" }}
         columns={columns}
@@ -113,6 +198,7 @@ export const Product = () => {
         onChange={(page) => setPage((page - 1) * 5)}
         defaultPageSize={5}
         total={data?.pageSize}
+        simple
       />
     </div>
   );

@@ -9,38 +9,26 @@ import { useNavigate } from "react-router-dom";
 import { client } from "../../config/query-client";
 import { SearchOutlined } from "@ant-design/icons";
 import useDebounce from "../../hook/useDebounce";
-import { useCategorySearch } from "./service/query/useCategorySearch";
-import { SearchDataType } from "./type";
-
-interface Props {
-  count: number;
-  next: null | string;
-  previous: null | string;
-  results: {
-    id: number;
-    title: string;
-    image: string;
-    children: { id: string; title: string; image: string }[];
-  }[];
+import { useGetSearchCategory } from "./service/query/useGetSearchCategory";
+interface DataTypeS {
+  id: number;
+  title: string;
+  image: string;
+  num: number;
 }
 
-export const Category = () => {
-  const [input, setInput] = React.useState<string>("");
-  let newInput = useDebounce(input);
-  const { mutate: searchMutate, isPending } = useCategorySearch();
-  const [search, setSearch] = React.useState([] as SearchDataType[]);
 
+export const Category = () => {
+  const [input, setInput] = React.useState<string | undefined>(undefined);
+  let newInput = useDebounce(input);
+  const { data: searchData, isPending: searchPending } =
+    useGetSearchCategory(newInput);
   const changeInput = (value: BaseSyntheticEvent) => {
     if (value.target.value?.length > 2) {
       setInput(value.target.value);
-      searchMutate(newInput, {
-        onSuccess: (res: Props) => {
-          setSearch(res.results);
-        },
-      });
     }
     if (value.target.value?.length <= 2) {
-      setInput("");
+      setInput(undefined);
     }
   };
 
@@ -73,7 +61,7 @@ export const Category = () => {
       },
     });
   };
-  const columns: TableProps<DataType>["columns"] = [
+  const columns: TableProps<DataTypeS>["columns"] = [
     {
       title: "O/N",
       dataIndex: "num",
@@ -123,10 +111,11 @@ export const Category = () => {
       ),
     },
   ];
-  const data = userData?.data.results?.map((item: DataType) => ({
+
+  const data = userData?.data.results?.map((item) => ({
     title: item.title,
     image: item.image,
-    id: item.id,
+    id: Number(item.id),
     num: n++,
   }));
   return (
@@ -154,7 +143,7 @@ export const Category = () => {
             addonAfter={<SearchOutlined />}
             placeholder="Category name"
           />
-          {input?.length > 2 && !isPending && (
+          {input != undefined && input?.length > 2 && !searchPending && (
             <div
               style={{
                 zIndex: "100",
@@ -168,12 +157,12 @@ export const Category = () => {
                 paddingTop: "15px",
                 paddingBottom: "15px",
                 boxShadow: " 8px 8px 24px 0px rgba(66, 68, 90, 1)",
-                height: "500px",
+                height: "250px",
                 overflowY: "scroll",
               }}
               className="boxScroll"
             >
-              {search?.map((i, index) => {
+              {searchData?.results?.map((i, index) => {
                 return (
                   <div
                     style={{
@@ -219,6 +208,7 @@ export const Category = () => {
           defaultPageSize={1}
           total={userData?.pageSize}
           pageSize={5}
+          simple
           onChange={pageData}
         />
       </div>

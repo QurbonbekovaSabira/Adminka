@@ -32,8 +32,6 @@ export const EditCategory = () => {
     formData.append("image", value.image.file);
     formData.append("parent", "");
 
-    formData.append("id", data?.id);
-
     mutate(formData, {
       onSuccess: () => {
         message.success("category update");

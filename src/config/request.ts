@@ -7,7 +7,7 @@ const requst = axios.create({
 });
 
 requst.interceptors.request.use(
-  (config: any): any => {
+  (config) => {
     const token = Cookies.get("user");
     if (config.url !== "/api/admin-login/") {
       config.headers["Authorization"] = `Token ${token}`;
@@ -20,7 +20,7 @@ requst.interceptors.request.use(
 );
 
 requst.interceptors.response.use(
-  (response: any): any => {
+  (response: any) => {
     if (response.status === 401) {
       return (window.location.pathname = "/api/admin-login/");
     }

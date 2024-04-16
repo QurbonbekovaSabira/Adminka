@@ -16,7 +16,7 @@ export const CreateSubCategory: React.FC<any> = (setActive) => {
       key: data.id,
     })
   );
-  
+
   const [onChange, setOnChane] = React.useState<string>(item[0]?.key);
   const [fileList, setFileList] = React.useState<UploadFile[]>([]);
   const handleChangeInput: UploadProps["onChange"] = ({
@@ -35,12 +35,10 @@ export const CreateSubCategory: React.FC<any> = (setActive) => {
     mutate(formData, {
       onSuccess: (res) => {
         message.success("Created sub category");
-        console.log(res.data.id);
-
         setActive.setActive({
           active: "2",
           title: subCategory.title,
-          id: Number(res.data.id),
+          id: Number(res.id),
         });
       },
       onError: (error) => {

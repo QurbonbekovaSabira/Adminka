@@ -17,6 +17,9 @@ import { ProductCreate } from "../pages/product/components/productCreate";
 import { ProductEdit } from "../pages/product/components/productEdit";
 import { ProductVariant } from "../pages/product-variant/product-variant";
 import { CreateProductVariant } from "../pages/product-variant/components/create-product-variant";
+import { Banners } from "../pages/banners/banners";
+import { BannerCreate } from "../pages/banners/components/bannerCreate";
+import { BannersEdit } from "../pages/banners/components/bannersEdit";
 interface mainRoutesType {
   component: React.FC;
   path?: string;
@@ -90,7 +93,19 @@ export const mainRoutes: mainRoutesType[] = [
     path: "product-variant",
   },
   {
-    component:CreateProductVariant,
-    path:"create-product-variant"
-  }
+    component: CreateProductVariant,
+    path: "create-product-variant",
+  },
+  {
+    component: Banners,
+    path: "banners",
+  },
+  {
+    component: BannerCreate,
+    path: "create-banners",
+  },
+  {
+    component: BannersEdit,
+    path: "edit-banners/:id",
+  },
 ];

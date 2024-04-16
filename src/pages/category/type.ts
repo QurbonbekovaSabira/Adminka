@@ -19,5 +19,5 @@ export interface SearchDataType {
     title: string;
     image: string;
   }[];
-}[]
-;
+}
+[];

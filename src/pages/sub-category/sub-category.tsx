@@ -118,6 +118,7 @@ export const SubCategory = () => {
         onChange={(page) => setPage((page - 1) * 5)}
         total={data?.pageSize}
         pageSize={5}
+        simple
       />
     </div>
   );

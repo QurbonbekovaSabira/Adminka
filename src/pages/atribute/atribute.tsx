@@ -1,5 +1,4 @@
 import { useGetAtribute } from "./service/query/useGetAtribute";
-import { SkeletonTable } from "../../components/skeleton-table";
 import {
   Table,
   Space,
@@ -25,7 +24,7 @@ interface CategoryType {
   id: number;
   title: string;
   category_title: string;
-  category: string;
+  category: number;
 }
 export const Atribute = () => {
   const [page, setPage] = React.useState<number>(1);
@@ -125,6 +124,7 @@ export const Atribute = () => {
             onChange={(page) => setPage((page + 1) * 5)}
             total={data?.data.count}
             pageSize={5}
+            simple
           />
         </div>
       </div>

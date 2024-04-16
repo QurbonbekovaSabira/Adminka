@@ -3,14 +3,12 @@ import { CreateCategoryComp } from "./create-categoryComp";
 import { CreateSubCategory } from "./create-sub-category";
 import React from "react";
 import { ActiveType } from "../type";
-
 export const CreateTab = () => {
   const [active, setActive] = React.useState<ActiveType>({
     active: "1",
     title: "",
     id: null,
   });
-  console.log(active);
 
   return (
     <Tabs

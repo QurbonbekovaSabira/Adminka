@@ -6,10 +6,11 @@ import { useLocation } from "react-router-dom";
 import {
   AppstoreAddOutlined,
   GlobalOutlined,
-  PieChartOutlined,
+  // PieChartOutlined,
   AppstoreOutlined,
   ShopOutlined,
-  SwitcherOutlined,
+  // SwitcherOutlined,
+  BorderOutlined,
 } from "@ant-design/icons";
 
 const { Content, Sider } = Layout;
@@ -45,12 +46,22 @@ const SideBarDatas = [
       </Link>
     ),
   },
+  // {
+  //   key: "/app/atribute",
+  //   label: (
+  //     <Link to={"/app/atribute"}>
+  //       <h4>
+  //         <PieChartOutlined /> Atribute
+  //       </h4>
+  //     </Link>
+  //   ),
+  // },
   {
-    key: "/app/atribute",
+    key: "/app/banners",
     label: (
-      <Link to={"/app/atribute"}>
+      <Link to={"/app/banners"}>
         <h4>
-          <PieChartOutlined /> Atribute
+          <BorderOutlined /> Banners
         </h4>
       </Link>
     ),
@@ -65,17 +76,16 @@ const SideBarDatas = [
       </Link>
     ),
   },
-  {
-    key: "/app/product-variant",
-    label: (
-      <Link to={"/app/product-variant"}>
-        <h4>
-          {" "}
-          <SwitcherOutlined /> Product variants
-        </h4>
-      </Link>
-    ),
-  },
+  // {
+  //   key: "/app/product-variant",
+  //   label: (
+  //     <Link to={"/app/product-variant"}>
+  //       <h4>
+  //         <SwitcherOutlined /> Product variants
+  //       </h4>
+  //     </Link>
+  //   ),
+  // },
 ];
 
 const items = SideBarDatas.map((item) => ({
@@ -112,7 +122,7 @@ export const MainLayout: React.FC = () => {
 
   return (
     <Layout>
-      <Sider style={{ height: "100vh", paddingTop: "25px" }}>
+      <Sider style={{ height: "100vh", paddingTop: "25px", zIndex: "10" }}>
         <div style={{ marginBottom: "25px" }}>
           <h1 className="amin_title">Admin</h1>
         </div>
@@ -123,7 +133,7 @@ export const MainLayout: React.FC = () => {
           items={items}
         />
       </Sider>
-      <Layout>
+      <Layout style={{ zIndex: "100", position: "relative" }}>
         <Content style={{ margin: "24px 16px 0" }}>
           <div
             style={{

@@ -1,11 +1,9 @@
-import React from "react";
-import { Button, Form, Input, Select, Spin, Switch, InputNumber } from "antd";
-import { Avatar, List, Tag } from "antd";
+import {  Form, Input, Select, Spin, InputNumber } from "antd";
+// import { Avatar, List, Tag } from "antd";
 
 import type { SelectProps } from "antd";
 import { useGetAtributeFull } from "../service/query/useGetAtributeFull";
 import { useGetProductFull } from "../service/query/useGetProductFull";
-const { TextArea } = Input;
 
 export const CreateProductVariant = () => {
   const { data, isLoading } = useGetProductFull();

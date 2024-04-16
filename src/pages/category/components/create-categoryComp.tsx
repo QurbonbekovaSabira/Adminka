@@ -14,17 +14,18 @@ export const CreateCategoryComp: React.FC<Type> = (setActive) => {
 
   const submit = (value: SubmitData) => {
     const formData = new FormData();
-
     formData.append("title", value.title);
     formData.append("image", value.image.file);
     formData.append("parent", "");
     mutate(formData, {
       onSuccess: (res) => {
+        console.log(res);
+
         message.success("Category cretated");
         setActive.setActive({
           active: "2",
           title: value.title,
-          id: res?.data?.id,
+          id: res.id,
         });
       },
       onError: (error) => {
