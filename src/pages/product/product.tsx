@@ -22,12 +22,10 @@ export const Product = () => {
   const [page, setPage] = React.useState<number>(1);
   const { data, isLoading } = useGetProduct(page);
   const navigate = useNavigate();
-  console.log(data?.data.results);
 
   const [input, setInput] = React.useState<string | undefined>(undefined);
   let newInput = useDebounce(input);
   const { data: searchData } = useGetSearchProduct(newInput);
-  console.log(searchData?.results);
 
   const [id, setId] = React.useState<undefined | number>(undefined);
   const { mutate, isPending } = useDeleteProduct(id);

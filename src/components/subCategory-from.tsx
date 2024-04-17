@@ -1,5 +1,5 @@
 import { Select, Form, Button, Input, Upload, Image } from "antd";
-import type { UploadFile, UploadProps } from "antd";
+import type { GetProp, UploadFile, UploadProps } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import React from "react";
 import { SubmitData } from "../type";
@@ -22,6 +22,15 @@ interface PropsType {
   };
 }
 
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+
+const getBase64 = (file: FileType): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
 export const SubCategoryFrom: React.FC<PropsType> = ({
   defaultValue,
   fileList,
@@ -32,6 +41,17 @@ export const SubCategoryFrom: React.FC<PropsType> = ({
   onFinish,
   initialValue,
 }) => {
+  const [previewOpen, setPreviewOpen] = React.useState(false);
+  const [previewImage, setPreviewImage] = React.useState("");
+
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as FileType);
+    }
+
+    setPreviewImage(file.url || (file.preview as string));
+    setPreviewOpen(true);
+  };
   return (
     <div>
       <div style={{ marginBottom: "20px" }}>
@@ -60,6 +80,7 @@ export const SubCategoryFrom: React.FC<PropsType> = ({
         </Form.Item>
         <Form.Item label="Image" name="image">
           <Upload.Dragger
+            onPreview={handlePreview}
             beforeUpload={() => false}
             maxCount={1}
             multiple={false}
@@ -72,6 +93,17 @@ export const SubCategoryFrom: React.FC<PropsType> = ({
                 <PlusOutlined />
                 <div style={{ marginTop: 8 }}>Upload</div>
               </button>
+            )}
+            {previewImage && (
+              <Image
+                wrapperStyle={{ display: "none" }}
+                preview={{
+                  visible: previewOpen,
+                  onVisibleChange: (visible) => setPreviewOpen(visible),
+                  afterOpenChange: (visible) => !visible && setPreviewImage(""),
+                }}
+                src={previewImage}
+              />
             )}
           </Upload.Dragger>
         </Form.Item>

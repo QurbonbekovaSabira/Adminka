@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { Cookies } from "typescript-cookie";
 
 const requst = axios.create({
@@ -20,9 +20,9 @@ requst.interceptors.request.use(
 );
 
 requst.interceptors.response.use(
-  (response: any) => {
+  (response: AxiosResponse): AxiosResponse => {
     if (response.status === 401) {
-      return (window.location.pathname = "/api/admin-login/");
+      window.location.pathname = "/api/admin-login/";
     }
     return response;
   },

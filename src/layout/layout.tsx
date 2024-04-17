@@ -9,7 +9,7 @@ import {
   // PieChartOutlined,
   AppstoreOutlined,
   ShopOutlined,
-  // SwitcherOutlined,
+  SwitcherOutlined,
   BorderOutlined,
 } from "@ant-design/icons";
 
@@ -21,7 +21,7 @@ const SideBarDatas = [
     label: (
       <Link to="/app">
         <h4>
-          <AppstoreOutlined /> Category
+          <AppstoreOutlined /> Category List
         </h4>
       </Link>
     ),
@@ -31,7 +31,7 @@ const SideBarDatas = [
     label: (
       <Link to="/app/subCategory">
         <h4>
-          <AppstoreAddOutlined /> Sub Category
+          <AppstoreAddOutlined /> Sub Category List
         </h4>
       </Link>
     ),
@@ -41,7 +41,7 @@ const SideBarDatas = [
     label: (
       <Link to={"/app/brand"}>
         <h4>
-          <GlobalOutlined /> Brand
+          <GlobalOutlined /> Brand List
         </h4>
       </Link>
     ),
@@ -61,7 +61,7 @@ const SideBarDatas = [
     label: (
       <Link to={"/app/banners"}>
         <h4>
-          <BorderOutlined /> Banners
+          <BorderOutlined /> Banners List
         </h4>
       </Link>
     ),
@@ -71,21 +71,21 @@ const SideBarDatas = [
     label: (
       <Link to={"/app/product"}>
         <h4>
-          <ShopOutlined /> Product
+          <ShopOutlined /> Product List
         </h4>
       </Link>
     ),
   },
-  // {
-  //   key: "/app/product-variant",
-  //   label: (
-  //     <Link to={"/app/product-variant"}>
-  //       <h4>
-  //         <SwitcherOutlined /> Product variants
-  //       </h4>
-  //     </Link>
-  //   ),
-  // },
+  {
+    key: "/app/product-variant",
+    label: (
+      <Link to={"/app/product-variant"}>
+        <h4>
+          <SwitcherOutlined /> Product variants
+        </h4>
+      </Link>
+    ),
+  },
 ];
 
 const items = SideBarDatas.map((item) => ({
@@ -134,7 +134,7 @@ export const MainLayout: React.FC = () => {
         />
       </Sider>
       <Layout style={{ zIndex: "100", position: "relative" }}>
-        <Content style={{ margin: "24px 16px 0" }}>
+        <Content style={{ margin: "24px 24px 0" }}>
           <div
             style={{
               padding: 24,

@@ -8,9 +8,18 @@ import {
   UploadFile,
   Image,
   UploadProps,
+  GetProp,
 } from "antd";
 import { SubmitData } from "../type";
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
+const getBase64 = (file: FileType): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
 interface PropsType {
   onFinish: (value: SubmitData) => void;
   loading?: boolean;
@@ -30,6 +39,17 @@ export const CategoryForm: React.FC<PropsType> = ({
   initialValue,
   name,
 }) => {
+  const [previewOpen, setPreviewOpen] = React.useState(false);
+  const [previewImage, setPreviewImage] = React.useState("");
+
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as FileType);
+    }
+
+    setPreviewImage(file.url || (file.preview as string));
+    setPreviewOpen(true);
+  };
   return (
     <Form
       name="basic"
@@ -49,6 +69,7 @@ export const CategoryForm: React.FC<PropsType> = ({
       <Form.Item label="Image" name="image">
         <Upload.Dragger
           onChange={onChange}
+          onPreview={handlePreview}
           beforeUpload={() => false}
           maxCount={1}
           multiple={false}
@@ -68,6 +89,17 @@ export const CategoryForm: React.FC<PropsType> = ({
               src={initialValue.image}
             />
           </div>
+        )}
+        {previewImage && (
+          <Image
+            wrapperStyle={{ display: "none" }}
+            preview={{
+              visible: previewOpen,
+              onVisibleChange: (visible) => setPreviewOpen(visible),
+              afterOpenChange: (visible) => !visible && setPreviewImage(""),
+            }}
+            src={previewImage}
+          />
         )}
         <Button loading={loading} type="primary" htmlType="submit">
           Submit

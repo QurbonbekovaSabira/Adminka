@@ -1,27 +1,12 @@
 import { useParams } from "react-router-dom";
 import { useGetProductId } from "../service/query/useGetProductId";
-import {
-  Button,
-  Form,
-  Input,
-  InputNumber,
-  Select,
-  Space,
-  Spin,
-  Switch,
-  Upload,
-  UploadFile,
-  UploadProps,
-  Image,
-  message,
-} from "antd";
+import { Spin, UploadFile, UploadProps, message } from "antd";
 import { useGetSubCategoryFull } from "../../../service/query/useGetSubCategoryFull";
 import React from "react";
-import { PlusOutlined } from "@ant-design/icons";
 import { SubmitProduct } from "../type";
 import { usePatchProduct } from "../service/mutation/usePatchProduct";
 import { useNavigate } from "react-router-dom";
-
+import { ProductForm } from "../../../components/product-form";
 export const ProductEdit = () => {
   const { id } = useParams();
   const [patchId, setId] = React.useState<number | undefined>(1);
@@ -34,6 +19,7 @@ export const ProductEdit = () => {
   const { data: subCategoryData, isLoading: subCategoryLoading } =
     useGetSubCategoryFull();
   let item: any = [];
+
   const handleChangeInput: UploadProps["onChange"] = ({
     fileList: newFileList,
   }) => setFileList(newFileList);
@@ -82,83 +68,19 @@ export const ProductEdit = () => {
   return (
     <div>
       {subCategoryLoading && <Spin fullscreen />}
-      <Form onFinish={submit} layout="vertical" style={{ maxWidth: 600 }}>
-        <p style={{ marginBottom: "10px" }}></p>
-        <Form.Item
-          label="Category"
-          name={"category"}
-          style={{ marginBottom: "20px" }}
-          rules={[{ required: true }]}
-        >
-          <Select
-            options={item}
-            defaultValue={selectProduct && selectProduct[0]?.title}
-          />
-        </Form.Item>
-        <Space>
-          <Form.Item label="Is New" name={"is_new"}>
-            <Switch />
-          </Form.Item>
-          <Form.Item name={"is_available"} label="Is Available">
-            <Switch />
-          </Form.Item>
-        </Space>
-        <Form.Item
-          initialValue={data?.title}
-          name="title"
-          rules={[{ required: true }]}
-          label="Product name"
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          initialValue={data?.price}
-          name={"price"}
-          rules={[{ required: true }]}
-          label="Price"
-        >
-          <InputNumber
-            style={{ width: "100%" }}
-            controls={false}
-            formatter={(value) =>
-              ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            }
-            parser={(value) =>
-              value?.replace(/\$\s?|(,*)/g, "") as unknown as number
-            }
-          />
-        </Form.Item>
-        <Form.Item label="Image" name="image">
-          <Upload.Dragger
-            beforeUpload={() => false}
-            maxCount={1}
-            multiple={false}
-            listType="picture-card"
-            fileList={fileList}
-            onChange={handleChangeInput}
-          >
-            {fileList.length >= 8 ? null : (
-              <button style={{ border: 0, background: "none" }} type="button">
-                <PlusOutlined />
-                <div style={{ marginTop: 8 }}>Upload</div>
-              </button>
-            )}
-          </Upload.Dragger>
-        </Form.Item>
-        {!fileList.length && (
-          <div style={{ width: "100px", marginBottom: "25px" }}>
-            <Image src={data?.image} />
-          </div>
-        )}
-        <Button
-          loading={isPending}
-          type="primary"
-          size="large"
-          htmlType="submit"
-        >
-          Send
-        </Button>
-      </Form>
+      <ProductForm
+        loading={subCategoryLoading || isPending}
+        submit={submit}
+        onChange={handleChangeInput}
+        options={item}
+        fileList={fileList}
+        initialValue={{
+          category: selectProduct,
+          title: data?.title,
+          price: data?.price,
+          image: data?.image,
+        }}
+      />
     </div>
   );
 };

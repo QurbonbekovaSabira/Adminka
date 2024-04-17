@@ -119,15 +119,7 @@ export const Brand = () => {
       title: "Image",
       dataIndex: "image",
       render: (img) => {
-        return (
-          <div>
-            <Image
-              style={{ width: "80px", height: "80px", objectFit: "cover" }}
-              src={img}
-              alt="img"
-            />
-          </div>
-        );
+        return <Image src={img} alt="img" width={50} height={50} />;
       },
     },
     {

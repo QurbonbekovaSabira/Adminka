@@ -1,7 +1,10 @@
 import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
+import { useGetProductVariant } from "./service/query/useGetProductVariant";
 export const ProductVariant = () => {
   const navigate = useNavigate();
+  const { data } = useGetProductVariant();
+  console.log(data?.results);
 
   return (
     <div>

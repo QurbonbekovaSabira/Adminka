@@ -1,4 +1,13 @@
-import { Button, Select, TableProps, Image, Space, Table, message } from "antd";
+import {
+  Button,
+  Select,
+  TableProps,
+  Image,
+  Space,
+  Table,
+  message,
+  Pagination,
+} from "antd";
 import { useNavigate } from "react-router-dom";
 import { useGetBanners } from "./service/query/useGetBanners";
 import React from "react";
@@ -15,8 +24,8 @@ export const Banners = () => {
     setType(text);
   };
   const [type, setType] = React.useState<string>("id");
-  const { data, isLoading } = useGetBanners(type);
-  console.log(data?.results);
+  const [page, setPage] = React.useState<number>(1);
+  const { data, isLoading } = useGetBanners(type, page);
   const deleteBanners = (id: number) => {
     setId(id);
     mutate(undefined, {
@@ -81,7 +90,7 @@ export const Banners = () => {
     },
   ];
   let n = 1;
-  const userData = data?.results?.map((item: DataType) => ({
+  const userData = data?.data?.results?.map((item: DataType) => ({
     title: item.title,
     image: item.image,
     id: item.id,
@@ -171,6 +180,9 @@ export const Banners = () => {
       value: "-description",
     },
   ];
+  const pageChange = (value: number) => {
+    setPage(value);
+  };
   return (
     <div>
       <div
@@ -200,9 +212,17 @@ export const Banners = () => {
       <Table
         style={{ marginBottom: "30px" }}
         loading={isLoading || isPending}
-        // pagination={false}
+        pagination={false}
         columns={columns}
         dataSource={userData}
+      />
+      <Pagination
+        style={{ textAlign: "end" }}
+        defaultPageSize={1}
+        total={data?.pageSize}
+        pageSize={5}
+        simple
+        onChange={pageChange}
       />
     </div>
   );
