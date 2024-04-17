@@ -180,9 +180,7 @@ export const Banners = () => {
       value: "-description",
     },
   ];
-  const pageChange = (value: number) => {
-    setPage(value);
-  };
+
   return (
     <div>
       <div
@@ -222,7 +220,7 @@ export const Banners = () => {
         total={data?.pageSize}
         pageSize={5}
         simple
-        onChange={pageChange}
+        onChange={(page) => setPage((page + 1) * 5)}
       />
     </div>
   );

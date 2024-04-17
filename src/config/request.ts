@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { Cookies } from "typescript-cookie";
 
 const requst = axios.create({
-  baseURL: "http://135.181.108.207",
+  baseURL: import.meta.env.VITE_URL,
   headers: { "Content-Type": "application/json" },
 });
 

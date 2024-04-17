@@ -17,7 +17,6 @@ interface DataTypeS {
   num: number;
 }
 
-
 export const Category = () => {
   const [input, setInput] = React.useState<string | undefined>(undefined);
   let newInput = useDebounce(input);
@@ -42,9 +41,6 @@ export const Category = () => {
   const { mutate } = useDeleteCategory(id);
   const [page, setPage] = React.useState<number>(1);
   const { data: userData, isLoading } = useGetCategory(page);
-  const pageData = (value: number) => {
-    setPage((value - 1) * 5);
-  };
 
   let n = 1;
   const deleteCategory = (newData: DataType) => {
@@ -209,7 +205,7 @@ export const Category = () => {
           total={userData?.pageSize}
           pageSize={5}
           simple
-          onChange={pageData}
+          onChange={(page) => setPage((page + 1) * 5)}
         />
       </div>
     </div>
